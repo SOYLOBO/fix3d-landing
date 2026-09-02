@@ -1,0 +1,32 @@
+# Deploy to Cloudflare Pages on every push to master.
+#
+# Requires two repository secrets (Settings → Secrets and variables → Actions):
+#   CLOUDFLARE_API_TOKEN   Create at dash.cloudflare.com/profile/api-tokens
+#                          Permissions: Account → Cloudflare Pages → Edit
+#   CLOUDFLARE_ACCOUNT_ID  35d9fcce01acf656ea1c2dbb1ec865ca
+#
+# The D1 binding lives in wrangler.toml and is applied by the deploy, so the
+# repair form keeps working without any extra configuration here.
+
+name: Deploy to Cloudflare Pages
+
+on:
+  push:
+    branches: [master]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      deployments: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Publish
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages deploy . --project-name=fix3d --branch=master
