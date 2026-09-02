@@ -1,8 +1,8 @@
 # FIX3D.CO — landing page
 
-Static site. No build step, no dependencies, no framework. `index.html` is the whole page
-(inline CSS + inline JS). Drop the folder on any host — Netlify, Vercel, Cloudflare Pages,
-GitHub Pages, S3 — and it works.
+Static site on **Cloudflare Pages**. No build step, no dependencies, no framework —
+`index.html` is the whole page (inline CSS + inline JS). The one dynamic piece is
+`functions/api/repair.js`, which stores repair requests in a **D1** database.
 
 Campaign: **PRINT HAPPENS.** The marketing is funny; the repair work is not a joke.
 
@@ -15,56 +15,71 @@ tools/build-images.sh regenerates every WebP + JPEG derivative from masters
 tools/og.html         source for the 1200×630 share card
 tools/parked-before-after.html  the before/after component, removed from the page for now
 images/               failed-prints/ · before-after/ · repairs/ · social/
+
+functions/api/repair.js  POST endpoint — validates, then inserts into D1
+schema.sql               the repair_requests table
+wrangler.toml            Pages project + D1 binding
+_headers                 cache policy, noindex on working files
 ```
 
-Local preview:
+Local preview (static only):
 
 ```bash
 python3 -m http.server 8000
 ```
 
----
+Local preview **with the form working** — runs the function against a local D1:
 
-## Before this goes live — 3 things to connect
-
-All three live in **one config block** at the bottom of `index.html`. Nothing is
-hardcoded anywhere else, and no fake IDs, endpoints or credentials exist in this repo.
-
-```js
-window.FIX3D_CONFIG = {
-  formEndpoint: null,   // form backend
-  metaPixelId:  null,   // Meta pixel
-  uploadsEnabled: false // photo uploads
-};
+```bash
+npx wrangler d1 execute fix3d-leads --local --file=schema.sql
+npx wrangler pages dev .
 ```
 
-### 1. `formEndpoint` — required, the site cannot take leads without it
+Deploy:
 
-The old `mailto:` form is **gone on purpose**: it dropped leads whenever the visitor had
-no mail client configured, which on Facebook mobile traffic is most of them.
+```bash
+npx wrangler pages deploy .
+```
 
-Until you set an endpoint the form validates normally, then refuses to submit and says so
-on screen. It never fails silently.
+---
 
-Pick any backend that accepts a POST of `multipart/form-data` and set the URL:
+## The repair form
 
-| Service | Endpoint looks like | Free-tier file uploads |
-|---|---|---|
-| Formspree | `https://formspree.io/f/xxxxxxxx` | paid plans |
-| Netlify Forms | your own `/` path + `data-netlify` | yes |
-| Getform | `https://getform.io/f/xxxxxxxx` | yes |
-| Basin | `https://usebasin.com/f/xxxxxxxx` | yes |
-| Web3Forms | `https://api.web3forms.com/submit` (+ `access_key` field) | yes |
+Submissions POST as `multipart/form-data` to `/api/repair`
+(`functions/api/repair.js`) and land in the **fix3d-leads** D1 database.
 
-The form posts every field plus campaign attribution: `utm_source`, `utm_medium`,
-`utm_campaign`, `utm_content`, `utm_term`, `fbclid`, `referrer`, `landing_page`.
-So the inbox tells you which ad produced the lead. A hidden honeypot field (`company`)
-silently absorbs bots.
+Everything is re-validated server-side — the browser checks are for the customer's
+benefit, not ours. Invalid submissions get a 422 naming the bad fields. A hidden
+honeypot (`company`) is answered with `200 {ok:true}` so bots think they succeeded,
+but nothing is stored. Queries are parameterised and `issue` / `service` are checked
+against allowlists.
 
-### 2. `metaPixelId` — needed for ad optimisation
+Every row carries its campaign attribution — `utm_source`, `utm_medium`,
+`utm_campaign`, `utm_content`, `utm_term`, `fbclid`, `referrer`, `landing_page`,
+plus `cf-ipcountry` — so the table tells you which ad produced the lead.
 
-Get it from Meta Events Manager (a 15–16 digit number). Paste it in and the pixel loads
-itself; leave it `null` and no pixel code runs at all. Events already wired:
+### Reading the leads
+
+```bash
+npx wrangler d1 execute fix3d-leads --remote \
+  --command "SELECT created_at, name, phone, email, zip, issue, service, utm_campaign FROM repair_requests WHERE status='new' ORDER BY id DESC"
+```
+
+`status` is `new` on insert; move it through `contacted` / `scheduled` / `done` / `junk`:
+
+```bash
+npx wrangler d1 execute fix3d-leads --remote --command "UPDATE repair_requests SET status='contacted' WHERE id=1"
+```
+
+Schema changes: edit `schema.sql`, then run it with `--remote`.
+
+## Still to connect
+
+### `metaPixelId` — needed for ad optimisation
+
+Get it from Meta Events Manager (a 15–16 digit number) and set it in the
+`FIX3D_CONFIG` block at the bottom of `index.html`. The pixel then loads itself;
+leave it `null` and no pixel code runs at all. Events already wired:
 
 | Event | Type | Fires when |
 |---|---|---|
@@ -72,18 +87,17 @@ itself; leave it `null` and no pixel code runs at all. Events already wired:
 | `RepairFormStart` | custom | first keystroke in the repair form |
 | `Lead` | **standard** | successful submission — *optimise the campaign for this* |
 | `RepairFormSubmit` | custom | same moment, for reporting |
-| `CTAClick` | custom | any "Fix my printer" button (`header`/`hero`/`meme-1`/`meme-2`/`final`/`sticky`) |
+| `CTAClick` | custom | any "Fix my printer" button |
 | `FailureCardClick` | custom | a failure card in "What did it do?" |
 
-Every call goes through a wrapper that no-ops when the pixel is absent, so nothing throws.
+Every call goes through a wrapper that no-ops when the pixel is absent.
 
-### 3. `uploadsEnabled` — photo uploads
+### Photo uploads
 
-Left `false` because whether photos survive depends entirely on the backend you choose.
-The file input is visible and usable, but files are stripped from the POST until you flip
-this to `true` on a plan that stores them. Turn it on and re-test with a real photo.
-
----
+`uploadsEnabled` is `false`. The file input is visible and usable, but files are
+stripped before the POST, because D1 stores rows and not blobs. Turning this on
+means adding an **R2** bucket, uploading each file in the function, and storing the
+object keys against the request. Until then, customers describe the fault in words.
 
 ## Also still placeholder
 

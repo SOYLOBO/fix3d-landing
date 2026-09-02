@@ -1,0 +1,12 @@
+# Long-cache the fingerprint-free assets we control; the HTML stays fresh.
+/images/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/
+  Cache-Control: public, max-age=0, must-revalidate
+
+# Working files that ship with the repo but shouldn't be indexed.
+/social.html
+  X-Robots-Tag: noindex
+/tools/*
+  X-Robots-Tag: noindex

@@ -596,13 +596,11 @@ img.fp-t{object-position:50% 12%}
 
       <div class="form-wrap rv">
         <!--
-          FORM BACKEND — integration boundary.
-          Nothing is hardcoded here. Set window.FIX3D_CONFIG.formEndpoint (see the
-          config block at the bottom of this file) to a real endpoint and this form
-          POSTs multipart/form-data to it. Until then it refuses to submit and says so,
-          rather than silently dropping leads (the old mailto: flow is gone on purpose).
-          Verified-compatible options: Formspree, Netlify Forms, Getform, Basin, Web3Forms.
-          File uploads only work on a backend that accepts multipart — see README.md.
+          FORM BACKEND — posts multipart/form-data to /api/repair, a Cloudflare Pages
+          Function that validates server-side and inserts into the fix3d-leads D1
+          database (functions/api/repair.js, schema.sql). The old mailto: flow is gone
+          on purpose: it dropped leads whenever a visitor had no mail client.
+          Photo uploads need R2 and are off until that exists — see README.md.
         -->
         <form id="repair-form" novalidate>
           <fieldset>
@@ -842,11 +840,12 @@ img.fp-t{object-position:50% 12%}
    See README.md for how to fill each one in.
    ===================================================================== */
 window.FIX3D_CONFIG = {
-  // e.g. 'https://formspree.io/f/xxxxxxxx' — must accept multipart/form-data for photo uploads
-  formEndpoint: null,
-  // e.g. '1234567890123456' — from Meta Events Manager
+  // Cloudflare Pages Function backed by the fix3d-leads D1 database.
+  // Source: functions/api/repair.js — schema in schema.sql
+  formEndpoint: '/api/repair',
+  // e.g. '1234567890123456' — from Meta Events Manager. Null = no pixel code runs.
   metaPixelId: null,
-  // set true once the endpoint above is confirmed to store file uploads
+  // Photos need object storage (R2), not D1. Off until that exists.
   uploadsEnabled: false
 };
 
@@ -988,7 +987,7 @@ window.FIX3D_CONFIG = {
       // Deliberate: no silent failure, and no mailto: fallback in production.
       status.textContent = 'This form isn’t connected to a backend yet — see README.md, FIX3D_CONFIG.formEndpoint.';
       status.classList.add('bad');
-      console.warn('[FIX3D] Submission blocked: FIX3D_CONFIG.formEndpoint is null. Set it to a real form endpoint.');
+      console.warn('[FIX3D] Submission blocked: FIX3D_CONFIG.formEndpoint is null.');
       return;
     }
 

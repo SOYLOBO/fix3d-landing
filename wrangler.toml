@@ -1,0 +1,15 @@
+# FIX3D — Cloudflare Pages project.
+# The site is static; functions/ adds the repair-request endpoint.
+#
+#   npx wrangler pages dev .                     run locally
+#   npx wrangler pages deploy .                  deploy
+#   npx wrangler d1 execute fix3d-leads --remote --command "SELECT * FROM repair_requests"
+
+name = "fix3d"
+pages_build_output_dir = "."
+compatibility_date = "2026-08-18"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "fix3d-leads"
+database_id = "d1235968-0a33-4958-8473-594b9ecc654f"
