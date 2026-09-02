@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>FIX3D — PRINT HAPPENS ad frames</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Archivo:wght@400;600;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{--ink:#0B0B0B;--paper:#F4F2ED;--yellow:#F5C518}
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  body{background:#242424;color:var(--paper);font-family:Archivo,system-ui,sans-serif;padding:32px}
+  img{display:block;max-width:100%}
+  .page{max-width:1240px;margin:0 auto}
+  h1{font-family:'Archivo Black',sans-serif;text-transform:uppercase;letter-spacing:-.03em;font-size:26px}
+  .lede{color:rgba(244,242,237,.62);font-size:14px;margin:10px 0 30px;max-width:76ch;line-height:1.65}
+  .lede code{font-family:'JetBrains Mono',monospace;font-size:12.5px;background:#111;padding:2px 6px;border-radius:2px}
+  .rail{display:flex;flex-wrap:wrap;gap:28px;align-items:flex-start}
+  .cap{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;
+       color:rgba(244,242,237,.5);margin-bottom:8px}
+
+  /* ============ THE AD FRAME ============
+     One formula: failed print + one deadpan line + fix3d.co. Nothing else.
+     Two treatments, because the photography comes in two lighting worlds:
+       .ad-overlay  dark candid photo, type reversed out over a scrim
+       .ad-block    studio photo on white, type on a solid block beneath it
+     Export at 1:1 — the .p scale below is preview only.                        */
+  .ad{position:relative;overflow:hidden;background:var(--ink);transform-origin:top left;
+      box-shadow:0 20px 60px rgba(0,0,0,.5);display:flex;flex-direction:column}
+  .ad.sq{width:1080px;height:1080px}
+  .ad.fd{width:1080px;height:1350px}
+  .ad.st{width:1080px;height:1920px}
+
+  .ad .tag{position:absolute;top:60px;left:60px;z-index:3;font-family:'JetBrains Mono',monospace;
+           font-size:21px;letter-spacing:.2em;text-transform:uppercase;color:var(--yellow)}
+  .ad-block .tag{color:var(--ink)}
+  .ad-block.on-dark .tag{color:var(--yellow)}
+  .ad .line{font-family:'Archivo Black',sans-serif;text-transform:uppercase;letter-spacing:-.035em;
+            line-height:.9;font-size:100px;text-wrap:balance}
+  .ad .url{display:inline-block;margin-top:32px;background:var(--yellow);color:var(--ink);
+           font-family:'Archivo Black',sans-serif;text-transform:uppercase;letter-spacing:-.02em;
+           font-size:42px;padding:10px 18px 13px;transform:rotate(-1.2deg)}
+
+  /* overlay treatment */
+  .ad-overlay img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:1}
+  .ad-overlay::after{content:"";position:absolute;inset:0;z-index:2;
+    background:linear-gradient(178deg,rgba(11,11,11,.72) 0%,rgba(11,11,11,.22) 34%,rgba(11,11,11,.93) 78%,var(--ink) 100%)}
+  .ad-overlay .stack{position:absolute;z-index:3;left:60px;right:60px;bottom:60px}
+
+  /* block treatment */
+  .ad-block .shot{flex:1;min-height:0;background:#e9e6df}
+  .ad-block .shot img{width:100%;height:100%;object-fit:cover}
+  .ad-block .stack{background:var(--paper);color:var(--ink);padding:52px 60px 56px}
+  .ad-block.on-dark .stack{background:var(--ink);color:var(--paper)}
+  .ad-block.on-yellow .stack{background:var(--yellow);color:var(--ink)}
+  .ad-block.on-yellow .url{background:var(--ink);color:var(--yellow)}
+
+  /* preview scale only — never export from these numbers */
+  .p .ad{transform:scale(.324)}
+  .p .sq{margin:0 -730px -730px 0}
+  .p .fd{margin:0 -730px -913px 0}
+  .p .st{margin:0 -730px -1298px 0}
+</style>
+</head>
+<body>
+<div class="page">
+  <h1>PRINT HAPPENS — ad frames</h1>
+  <p class="lede">
+    The campaign formula as a reusable component: <strong>one failed print, one deadpan line, fix3d.co.</strong>
+    Nothing else. Same type, colour and crop rules as the site, so the ads and the landing page read as one world.
+    Masters are 4:5, which is why <code>fd</code> (1080&times;1350) is the native ratio and the strongest feed placement.
+    <br><br>
+    <strong>To export:</strong> open this file, DevTools &rarr; device toolbar, screenshot each <code>.ad</code> node at 1:1
+    (or point a headless screenshot tool at it). <strong>To make a new ad:</strong> copy a frame, swap the
+    <code>&lt;img&gt;</code>, edit the <code>.line</code>. Use <code>ad-overlay</code> for dark candid photos and
+    <code>ad-block</code> for studio shots on white.
+  </p>
+
+  <div class="rail p">
+
+    <div>
+      <p class="cap">AD-01 &middot; 1080&times;1350 &middot; feed &middot; <strong>launch ad</strong></p>
+      <div class="ad fd ad-block">
+        <p class="tag">Print happens</p>
+        <div class="shot"><img src="images/failed-prints/hero-dragon.jpg" alt=""></div>
+        <div class="stack">
+          <p class="line">This was supposed to be a dragon.</p>
+          <p class="url">fix3d.co</p>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <p class="cap">AD-02 &middot; 1080&times;1350 &middot; feed</p>
+      <div class="ad fd ad-overlay">
+        <p class="tag">Print happens</p>
+        <img src="images/failed-prints/m01-overnight.jpg" alt="">
+        <div class="stack">
+          <p class="line">It was fine when I went to bed.</p>
+          <p class="url">fix3d.co</p>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <p class="cap">AD-03 &middot; 1080&times;1350 &middot; feed</p>
+      <div class="ad fd ad-block on-dark">
+        <p class="tag">Print happens</p>
+        <div class="shot"><img src="images/failed-prints/m01-half-a-face.jpg" alt=""></div>
+        <div class="stack">
+          <p class="line">We&rsquo;ve seen worse.</p>
+          <p class="url">fix3d.co</p>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <p class="cap">AD-04 &middot; 1080&times;1350 &middot; feed</p>
+      <div class="ad fd ad-block on-yellow">
+        <p class="tag">Print happens</p>
+        <div class="shot"><img src="images/social/ad-one-sad-strand.jpg" alt=""></div>
+        <div class="stack">
+          <p class="line">Nothing comes out.</p>
+          <p class="url">fix3d.co</p>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <p class="cap">AD-05 &middot; 1080&times;1350 &middot; feed</p>
+      <div class="ad fd ad-overlay">
+        <p class="tag">Print happens</p>
+        <img src="images/social/ad-youtube-tutorial.jpg" alt="">
+        <div class="stack">
+          <p class="line">You don&rsquo;t need another YouTube tutorial.</p>
+          <p class="url">fix3d.co</p>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <p class="cap">AD-06 &middot; 1080&times;1080 &middot; feed</p>
+      <div class="ad sq ad-block">
+        <p class="tag">Print happens</p>
+        <div class="shot"><img src="images/failed-prints/m02-benchy.jpg" style="object-position:50% 74%" alt=""></div>
+        <div class="stack">
+          <p class="line">The boat has sunk.</p>
+          <p class="url">fix3d.co</p>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <p class="cap">AD-07 &middot; 1080&times;1920 &middot; stories / reels</p>
+      <div class="ad st ad-overlay">
+        <p class="tag">Print happens</p>
+        <img src="images/failed-prints/m01-overnight.jpg" alt="">
+        <div class="stack" style="bottom:180px">
+          <p class="line">Spaghetti belongs on a plate.</p>
+          <p class="url">fix3d.co</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+</body>
+</html>

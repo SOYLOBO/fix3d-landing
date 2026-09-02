@@ -1,0 +1,83 @@
+<!--
+  PARKED COMPONENT — Before / after repair log.
+  Removed from index.html on request ("for now"). Nothing else was changed.
+
+  TO PUT IT BACK
+  1. Paste the CSS below into index.html's <style>, just before
+     the "/* ---------- area band ---------- */" comment.
+  2. Paste the markup below into index.html, just before the
+     "<!-- ============ SERVICE AREA ============ -->" comment.
+  3. Restore the footer nav link inside <nav class="foot-nav">:
+       <a href="#proof">Before / after</a>
+  4. Its placeholder images are still in images/before-after/.
+
+  It is a reusable component: one <article class="case"> per repair. Duplicate it
+  for each job, swap the two images, fill in Printer / Problem / Diagnosis / Repair,
+  and delete the .note-ph banner once the case describes a real repair.
+  Never publish a fabricated case.
+-->
+
+<!-- ============ CSS ============ -->
+<style>
+/* ---------- before / after ---------- */
+.note-ph{
+  display:flex;gap:12px;align-items:flex-start;
+  border:1px dashed var(--yellow);background:rgba(245,197,24,.07);
+  padding:14px 16px;border-radius:2px;margin-bottom:26px;
+}
+.note-ph b{color:var(--yellow);flex:none;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.14em}
+.note-ph p{font-size:13.5px;color:var(--mute)}
+.ba{display:grid;grid-template-columns:1fr;gap:12px}
+@media(min-width:640px){.ba{grid-template-columns:repeat(2,1fr)}}
+.ba figure{position:relative;border:1px solid var(--line);background:var(--ink-2);border-radius:2px;overflow:hidden}
+.ba img{width:100%;aspect-ratio:1/1;object-fit:cover}
+.ba figcaption{position:absolute;top:0;left:0;font-family:'Archivo Black',sans-serif;font-size:12px;letter-spacing:.14em;text-transform:uppercase;padding:6px 12px;background:var(--ink);color:var(--paper);border-right:1px solid var(--line);border-bottom:1px solid var(--line)}
+.ba .after figcaption{background:var(--yellow);color:var(--ink);border-color:var(--yellow)}
+.ba-facts{margin-top:12px;border:1px solid var(--line);border-radius:2px}
+.ba-facts div{display:grid;grid-template-columns:1fr;gap:2px;padding:13px 16px;border-bottom:1px solid var(--line)}
+@media(min-width:560px){.ba-facts div{grid-template-columns:150px 1fr;gap:14px;align-items:baseline}}
+.ba-facts div:last-child{border-bottom:none}
+.ba-facts p{font-size:14.5px}
+</style>
+
+<!-- ============ MARKUP ============ -->
+  <!-- ============ BEFORE / AFTER ============ -->
+  <section class="sec" id="proof">
+    <div class="wrap">
+      <div class="sec-head rv">
+        <p class="lbl">Repair log</p>
+        <h2 class="d h2">Before / after</h2>
+      </div>
+
+      <!--
+        PLACEHOLDER REPAIR CASE — this is a reusable component, not a real customer job.
+        Do not publish as-is. To add a real case: duplicate this <article class="case">,
+        swap the two images, and fill Printer / Problem / Diagnosis / Repair with facts
+        from an actual repair. Delete the .note-ph block once the case is real.
+      -->
+      <article class="case rv">
+        <div class="note-ph">
+          <b>Placeholder</b>
+          <p>Example layout only &mdash; not a real customer repair. Replace with a documented job (and its photos) before this page goes live.</p>
+        </div>
+        <div class="ba">
+          <figure class="before">
+        <img src="images/before-after/case-01-before.svg" width="1200" height="1200" loading="lazy" decoding="async"
+             alt="Placeholder image: the printer or failed output as it arrived for service">
+            <figcaption>Before</figcaption>
+          </figure>
+          <figure class="after">
+        <img src="images/before-after/case-01-after.svg" width="1200" height="1200" loading="lazy" decoding="async"
+             alt="Placeholder image: a clean successful print from the same machine after service">
+            <figcaption>After</figcaption>
+          </figure>
+        </div>
+        <div class="ba-facts">
+          <div><p class="lbl">Printer</p><p>&mdash;</p></div>
+          <div><p class="lbl">Problem</p><p>&mdash;</p></div>
+          <div><p class="lbl">Diagnosis</p><p>&mdash;</p></div>
+          <div><p class="lbl">Repair</p><p>&mdash;</p></div>
+        </div>
+      </article>
+    </div>
+  </section>

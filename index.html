@@ -1,424 +1,1074 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
-<title>FIX3D — 3D Printer Repair, Maintenance & Calibration | North NJ</title>
-<meta name="description" content="3D printer down? FIX3D repairs, maintains, and calibrates Bambu Lab, FDM, resin, large-format, and print-farm machines. Drop-off & on-site service in North NJ." />
-<meta name="robots" content="index, follow" />
-<meta property="og:title" content="FIX3D — 3D Printer Down? We'll Get It Printing Again." />
-<meta property="og:description" content="Troubleshooting, repair, maintenance & calibration for Bambu Lab, FDM, resin, large-format & print-farm printers. Drop-off & on-site service in North NJ." />
-<meta property="og:type" content="website" />
-<meta name="twitter:card" content="summary_large_image" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0B0B0B">
 
-<!-- PLACEHOLDER: swap in a real favicon once branding is finalized -->
-<link rel="icon" href="data:,">
+<title>FIX3D — 3D Printer Repair, Maintenance &amp; Calibration | North NJ</title>
+<meta name="description" content="Print happens. FIX3D diagnoses, repairs, maintains and calibrates Bambu Lab, FDM, resin, large-format and print-farm 3D printers. Drop-off and on-site service in North NJ.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://fix3d.co/">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="FIX3D">
+<meta property="og:url" content="https://fix3d.co/">
+<meta property="og:title" content="PRINT HAPPENS. — FIX3D fixes 3D printers.">
+<meta property="og:description" content="Spaghetti, blobs, layer shifts, dead boards. Diagnosis, repair, maintenance and calibration for Bambu Lab, FDM, resin, large-format and print farms. North NJ — drop-off &amp; on-site.">
+<!-- PLACEHOLDER: 1200x630 social share image. See ASSETS.md → og-image. -->
+<meta property="og:image" content="https://fix3d.co/images/social/og-image.jpg">
+<meta property="og:image:alt" content="A catastrophic failed 3D print with the line PRINT HAPPENS and fix3d.co">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="PRINT HAPPENS. — FIX3D fixes 3D printers.">
+<meta name="twitter:description" content="3D printer repair, maintenance and calibration in North NJ. Drop-off &amp; on-site.">
+
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%230B0B0B'/%3E%3Ctext x='16' y='23' font-family='Arial Black,Arial,sans-serif' font-size='19' font-weight='900' fill='%23F5C518' text-anchor='middle'%3E3%3C/text%3E%3C/svg%3E">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="preload" as="image" href="images/failed-prints/hero-dragon.webp" type="image/webp" fetchpriority="high">
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Archivo:wght@400;600;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
 
-<!-- PLACEHOLDER: Meta Pixel — paste your pixel id once the ad account/pixel exists -->
-<!--
-<script>
-!function(f,b,e,v,n,t,s){...}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
-fbq('init', 'YOUR_PIXEL_ID');
-fbq('track', 'PageView');
-</script>
--->
+<script>document.documentElement.className += ' js';</script>
 
 <style>
-  :root{
-    --bg:#0a0a0a;
-    --bg-2:#141414;
-    --card:#1a1a1a;
-    --border:rgba(255,255,255,0.08);
-    --yellow:#F5C518;
-    --yellow-dim:rgba(245,197,24,0.12);
-    --text:#F2F2F0;
-    --text-dim:rgba(242,242,240,0.62);
-    --text-faint:rgba(242,242,240,0.4);
-  }
-  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-  html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
-  body{
-    background:var(--bg);
-    color:var(--text);
-    font-family:Inter,system-ui,-apple-system,sans-serif;
-    overflow-x:hidden;
-    -webkit-font-smoothing:antialiased;
-    line-height:1.5;
-  }
-  img{max-width:100%;display:block}
-  a{color:inherit}
-  .wrap{max-width:1100px;margin:0 auto;padding-left:24px;padding-right:24px}
-  .headline-font{font-family:'Archivo Black',Inter,system-ui,sans-serif}
+:root{
+  --ink:#0B0B0B;
+  --ink-2:#141414;
+  --ink-3:#1B1B1B;
+  --paper:#F4F2ED;
+  --yellow:#F5C518;
+  --line:rgba(244,242,237,.14);
+  --line-ink:rgba(11,11,11,.18);
+  --mute:rgba(244,242,237,.56);
+  --mute-ink:rgba(11,11,11,.62);
+  --red:#FF6B4A;
+  --gut:20px;
+  --max:1200px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth;scroll-padding-top:60px}
+body{
+  background:var(--ink);color:var(--paper);
+  font-family:Archivo,system-ui,-apple-system,"Segoe UI",sans-serif;
+  font-size:16px;line-height:1.55;overflow-x:hidden;-webkit-font-smoothing:antialiased;
+}
+img,svg{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--yellow);outline-offset:2px}
+.paper :focus-visible,.on-yellow :focus-visible{outline-color:var(--ink)}
 
-  /* Header */
-  header{
-    position:sticky;top:0;z-index:50;
-    background:rgba(10,10,10,0.9);
-    backdrop-filter:blur(8px);
-    border-bottom:1px solid var(--border);
-  }
-  header .wrap{display:flex;align-items:center;justify-content:center;padding-top:16px;padding-bottom:16px}
-  .logo{font-family:'Archivo Black',sans-serif;font-size:22px;letter-spacing:-0.02em}
-  .logo span{color:var(--yellow)}
+.wrap{max-width:var(--max);margin:0 auto;padding:0 var(--gut)}
+.sec{padding:64px 0}
+.d{font-family:'Archivo Black',Archivo,Impact,sans-serif;text-transform:uppercase;letter-spacing:-.03em;line-height:.92;font-weight:400}
+.mono{font-family:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,monospace}
+.lbl{font-family:'JetBrains Mono',ui-monospace,Menlo,monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--mute)}
+.paper .lbl{color:var(--mute-ink)}
+.h2{font-size:clamp(2rem,8.5vw,4.4rem)}
+.paper{background:var(--paper);color:var(--ink)}
+.skip{position:absolute;left:-9999px}
+.skip:focus{position:fixed;left:12px;top:12px;z-index:200;background:var(--yellow);color:var(--ink);padding:12px 18px;font-weight:800}
 
-  /* Hero */
-  .hero{
-    position:relative;
-    padding:72px 0 56px;
-    background:
-      radial-gradient(ellipse 700px 400px at 50% 0%, rgba(245,197,24,0.10), transparent 70%),
-      var(--bg);
-    border-bottom:1px solid var(--border);
-    text-align:center;
-  }
-  .eyebrow{
-    display:inline-flex;align-items:center;gap:8px;
-    padding:7px 16px;border-radius:9999px;
-    border:1px solid rgba(245,197,24,0.35);background:var(--yellow-dim);
-    color:var(--yellow);font-size:13px;font-weight:700;letter-spacing:0.04em;
-    text-transform:uppercase;margin-bottom:22px;
-  }
-  .hero h1{
-    font-size:clamp(2.1rem,6.5vw,3.6rem);
-    line-height:1.08;
-    letter-spacing:-0.01em;
-    margin-bottom:18px;
-  }
-  .hero h1 .accent{color:var(--yellow)}
-  .hero .sub{
-    font-size:clamp(15px,2.4vw,19px);
-    font-weight:600;
-    color:var(--text-dim);
-    letter-spacing:0.02em;
-    margin-bottom:28px;
-  }
-  .hero .sub .dot{color:var(--yellow);margin:0 8px}
-  .btn-primary{
-    display:inline-flex;align-items:center;justify-content:center;gap:8px;
-    background:var(--yellow);color:#0a0a0a;font-weight:800;font-size:17px;
-    padding:17px 34px;border-radius:8px;text-decoration:none;
-    width:100%;max-width:380px;
-    box-shadow:0 8px 24px rgba(245,197,24,0.18);
-  }
-  .hero .badges{
-    display:flex;flex-wrap:wrap;justify-content:center;gap:8px 22px;
-    margin-top:26px;font-size:13px;font-weight:600;color:var(--text-faint);
-  }
-  .hero-art{
-    max-width:300px;margin:32px auto 0;
-  }
-  .hero-art img{width:100%;height:auto;display:block;filter:drop-shadow(0 24px 32px rgba(0,0,0,0.55))}
+/* ---------- header ---------- */
+.hdr{position:sticky;top:0;z-index:100;background:rgba(11,11,11,.94);border-bottom:1px solid var(--line);backdrop-filter:saturate(140%) blur(8px)}
+.hdr .wrap{display:flex;align-items:center;gap:16px;height:56px}
+.mark{font-family:'Archivo Black',sans-serif;font-size:20px;letter-spacing:-.04em;text-transform:uppercase}
+.mark i{color:var(--yellow);font-style:normal}
+.hdr nav{display:none;margin-left:auto;gap:26px}
+.hdr nav a{font-size:12px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--mute)}
+.hdr nav a:hover{color:var(--paper)}
+.hdr .btn{margin-left:auto;padding:12px 16px;font-size:12px}
+.hdr nav+.btn{margin-left:0}
 
-  /* Trust strip: printer types */
-  .type-strip{
-    border-bottom:1px solid var(--border);background:var(--bg-2);
-  }
-  .type-strip .wrap{
-    display:flex;flex-wrap:wrap;justify-content:center;gap:10px;
-    padding:22px 24px;
-  }
-  .type-pill{
-    font-size:13px;font-weight:700;color:var(--text-dim);
-    border:1px solid var(--border);border-radius:9999px;padding:8px 16px;
-  }
+/* ---------- buttons ---------- */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:10px;
+  background:var(--yellow);color:var(--ink);
+  font-weight:800;font-size:15px;letter-spacing:.06em;text-transform:uppercase;
+  padding:16px 26px;border:2px solid var(--yellow);border-radius:2px;cursor:pointer;
+  transition:transform .12s ease, background .12s ease;
+}
+.btn:hover{background:#ffd52e;border-color:#ffd52e}
+.btn:active{transform:translateY(1px)}
+.btn-ghost{background:transparent;color:var(--paper);border-color:var(--line)}
+.btn-ghost:hover{background:transparent;border-color:var(--paper)}
+.btn-ink{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.btn-ink:hover{background:#000;border-color:#000}
+.btn-lg{width:100%;padding:19px 26px;font-size:16px}
+@media(min-width:560px){.btn-lg{width:auto;min-width:300px}}
 
-  section{padding:64px 0}
-  .section-title{
-    font-family:'Archivo Black',sans-serif;
-    font-size:clamp(1.5rem,4vw,2.1rem);
-    text-align:center;margin-bottom:12px;letter-spacing:-0.01em;
-  }
-  .section-sub{
-    text-align:center;color:var(--text-dim);max-width:620px;margin:0 auto 40px;font-size:16px;
-  }
+/* ---------- hero ----------
+   Split, not full-bleed: the photography is 4:5 portrait, so overlaying type on a
+   wide crop would throw away most of the frame. Copy panel + photo, side by side. */
+.hero{display:grid;grid-template-columns:1fr;background:var(--ink)}
+.hero-media{position:relative;order:-1;background:#e9e6df}
+.hero-media img{width:100%;height:100%;aspect-ratio:4/5;max-height:44svh;object-fit:cover;object-position:52% 34%}
+.hero-copy{padding:30px var(--gut) 36px}
+.hero-kicker{display:flex;align-items:center;gap:10px;margin-bottom:18px}
+.hero-kicker span{width:26px;height:2px;background:var(--yellow);flex:none}
+.hero h1{font-size:clamp(2.4rem,11vw,4.6rem);max-width:14ch;text-wrap:balance}
+.hero .stamp{
+  display:inline-block;margin:20px 0 12px;padding:6px 12px 7px;
+  background:var(--yellow);color:var(--ink);
+  font-family:'Archivo Black',sans-serif;text-transform:uppercase;letter-spacing:-.02em;
+  font-size:clamp(1.5rem,6.5vw,2.6rem);line-height:1;transform:rotate(-1.2deg);
+}
+.hero .said{font-size:clamp(1.05rem,3.6vw,1.3rem);font-weight:600;color:var(--paper);margin-bottom:24px}
+.hero-meta{display:flex;flex-wrap:wrap;gap:8px 20px;margin-top:20px}
+.hero-meta li{list-style:none}
 
-  /* Problem list */
-  .problem-block{
-    background:var(--card);border:1px solid var(--border);border-radius:14px;
-    padding:32px;max-width:820px;margin:0 auto;text-align:center;
-  }
-  .problem-block p{font-size:clamp(16px,2.6vw,19px);font-weight:600;color:var(--text-dim);line-height:1.7}
-  .problem-block strong{color:var(--text)}
+/* ---------- ticker ---------- */
+.ticker{background:var(--yellow);color:var(--ink);overflow:hidden;border-block:2px solid var(--ink)}
+.ticker div{display:flex;width:max-content;animation:slide 34s linear infinite}
+.ticker p{
+  font-family:'Archivo Black',sans-serif;text-transform:uppercase;letter-spacing:-.01em;
+  font-size:15px;padding:10px 0;white-space:nowrap;
+}
+.ticker p span{padding:0 18px;opacity:.45}
+@keyframes slide{to{transform:translateX(-50%)}}
 
-  /* Services grid */
-  .services{
-    display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;
-  }
-  .service-card{
-    background:var(--card);border:1px solid var(--border);border-radius:12px;
-    padding:24px;
-  }
-  .service-card h3{font-size:17px;margin-bottom:6px;color:var(--yellow)}
-  .service-card p{font-size:14px;color:var(--text-faint)}
+/* ---------- failure grid ---------- */
+.sec-head{margin-bottom:34px}
+.sec-head p{color:var(--mute);max-width:44ch;margin-top:12px}
+.paper .sec-head p{color:var(--mute-ink)}
+.failgrid{display:grid;grid-template-columns:1fr;gap:12px}
+@media(min-width:560px){.failgrid{grid-template-columns:repeat(2,1fr)}}
+@media(min-width:940px){.failgrid{grid-template-columns:repeat(3,1fr)}}
+.fail{
+  position:relative;display:block;background:var(--ink-2);
+  border:1px solid var(--line);border-radius:2px;overflow:hidden;
+  transition:border-color .15s ease, background .15s ease;
+}
+.fail:hover,.fail:focus-visible{border-color:var(--yellow);background:var(--ink-3)}
+.fail figure{position:relative;aspect-ratio:1/1;overflow:hidden;background:#0f0f0f}
+.fail img{width:100%;height:100%;object-fit:cover;transition:transform .4s cubic-bezier(.2,.7,.3,1)}
+.fail:hover img{transform:scale(1.04)}
+.fail figcaption{position:absolute;left:0;top:0;background:var(--yellow);color:var(--ink);
+  font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;letter-spacing:.1em;padding:4px 9px}
+.fail .body{padding:16px 16px 18px;display:flex;align-items:flex-start;gap:12px}
+.fail h3{font-family:'Archivo Black',sans-serif;text-transform:uppercase;letter-spacing:-.02em;font-size:19px;line-height:1.05;font-weight:400}
+.fail p{font-size:13.5px;color:var(--mute);margin-top:5px}
+.fail .arrow{margin-left:auto;color:var(--yellow);font-size:17px;line-height:1;flex:none;transition:transform .15s ease}
+.fail:hover .arrow{transform:translateX(3px)}
 
-  /* How it works */
-  .steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:20px}
-  .step{text-align:center;padding:8px}
-  .step .num{
-    width:44px;height:44px;border-radius:50%;background:var(--yellow);color:#0a0a0a;
-    font-family:'Archivo Black',sans-serif;font-size:18px;
-    display:flex;align-items:center;justify-content:center;margin:0 auto 16px;
-  }
-  .step h3{font-size:16px;margin-bottom:6px}
-  .step p{font-size:14px;color:var(--text-faint)}
+/* ---------- meme interrupt ----------
+   Campaign poster: portrait photo + one deadpan line. .meme-light carries the
+   studio shots (white ground, black type); the default carries the candid ones. */
+.meme{display:grid;grid-template-columns:1fr;background:var(--ink);border-block:1px solid var(--line)}
+.meme-light{background:var(--paper);color:var(--ink);border-color:var(--line-ink)}
+.meme-media{position:relative;background:#111}
+.meme-light .meme-media{background:#e9e6df}
+.meme-media img{width:100%;aspect-ratio:4/5;max-height:60svh;object-fit:cover}
+.meme-copy{padding:34px var(--gut) 40px;display:flex;flex-direction:column;justify-content:center;align-items:flex-start}
+.meme h2{font-size:clamp(2.1rem,9vw,4.2rem);max-width:14ch;text-wrap:balance}
+.meme .sub{margin-top:14px;font-size:clamp(1rem,3.4vw,1.2rem);font-weight:600;opacity:.72;max-width:32ch}
+.meme-light .sig{color:var(--ink);border-color:var(--ink)}
+.sig{display:inline-block;margin-top:26px;font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--yellow);border-bottom:2px solid var(--yellow);padding-bottom:3px}
 
-  /* Service area */
-  .area-band{
-    background:var(--bg-2);border-top:1px solid var(--border);border-bottom:1px solid var(--border);
-    text-align:center;padding:44px 24px;
-  }
-  .area-band h2{font-size:clamp(1.3rem,3.5vw,1.7rem);margin-bottom:8px}
-  .area-band p{color:var(--text-dim);font-size:16px}
+/* ---------- services (paper) ---------- */
+.svc{display:grid;grid-template-columns:1fr;gap:0;border-top:2px solid var(--ink)}
+@media(min-width:760px){.svc{grid-template-columns:repeat(2,1fr);column-gap:44px}}
+.svc li{list-style:none;display:flex;gap:16px;padding:20px 0;border-bottom:1px solid var(--line-ink)}
+.svc .n{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;color:var(--ink);opacity:.4;padding-top:4px;flex:none}
+.svc h3{font-family:'Archivo Black',sans-serif;text-transform:uppercase;font-size:16px;letter-spacing:-.01em;font-weight:400}
+.svc p{font-size:14px;color:var(--mute-ink);margin-top:3px}
 
-  /* Closing / CTA band */
-  .cta-band{text-align:center;padding:72px 24px;background:
-    radial-gradient(ellipse 600px 300px at 50% 100%, rgba(245,197,24,0.08), transparent 70%),
-    var(--bg);
-  }
-  .cta-band h2{
-    font-family:'Archivo Black',sans-serif;
-    font-size:clamp(1.6rem,4.5vw,2.4rem);
-    max-width:680px;margin:0 auto;line-height:1.25;
-  }
-  .cta-band h2 .accent{color:var(--yellow)}
+.cover{margin-top:44px;border:2px solid var(--ink);border-radius:2px}
+.cover .cover-hd{background:var(--ink);color:var(--paper);padding:9px 16px}
+.cover ul{display:grid;grid-template-columns:1fr;gap:0}
+@media(min-width:640px){.cover ul{grid-template-columns:repeat(2,1fr)}}
+@media(min-width:980px){.cover ul{grid-template-columns:repeat(3,1fr)}}
+.cover li{list-style:none;padding:15px 16px;font-weight:600;font-size:14.5px;border-top:1px solid var(--line-ink);display:flex;gap:10px;align-items:baseline}
+.cover li::before{content:"";width:7px;height:7px;background:var(--yellow);border:1px solid var(--ink);flex:none;transform:translateY(-1px)}
 
-  /* Contact form */
-  #contact{background:var(--bg-2);border-top:1px solid var(--border)}
-  .form-card{
-    max-width:560px;margin:0 auto;background:var(--card);border:1px solid var(--border);
-    border-radius:14px;padding:32px;
-  }
-  .field{margin-bottom:16px}
-  .field label{display:block;font-size:13px;font-weight:700;color:var(--text-dim);margin-bottom:6px}
-  .field input,.field select,.field textarea{
-    width:100%;background:#0f0f0f;border:1px solid var(--border);border-radius:8px;
-    padding:12px 14px;color:var(--text);font-family:inherit;font-size:15px;
-  }
-  .field textarea{resize:vertical;min-height:96px}
-  .field input:focus,.field select:focus,.field textarea:focus{outline:2px solid var(--yellow);outline-offset:1px}
-  .btn-submit{
-    width:100%;background:var(--yellow);color:#0a0a0a;font-weight:800;font-size:16px;
-    padding:16px;border:none;border-radius:8px;cursor:pointer;margin-top:6px;
-  }
-  .form-note{font-size:12px;color:var(--text-faint);text-align:center;margin-top:14px}
+/* ---------- how it works ---------- */
+.steps{display:grid;grid-template-columns:1fr;gap:0;border-top:2px solid var(--ink)}
+@media(min-width:820px){.steps{grid-template-columns:repeat(3,1fr);column-gap:32px}}
+.steps li{list-style:none;padding:26px 0;border-bottom:1px solid var(--line-ink)}
+@media(min-width:820px){.steps li{border-bottom:none}}
+.steps .n{font-family:'Archivo Black',sans-serif;font-size:clamp(2.6rem,9vw,4rem);line-height:.85;color:var(--yellow);-webkit-text-stroke:2px var(--ink);paint-order:stroke fill;display:block;margin-bottom:14px}
+.steps h3{font-family:'Archivo Black',sans-serif;text-transform:uppercase;font-size:19px;letter-spacing:-.02em;margin-bottom:7px;font-weight:400}
+.steps p{font-size:14.5px;color:var(--mute-ink);max-width:34ch}
 
-  /* FAQ */
-  .faq-item{border-bottom:1px solid var(--border);padding:20px 0}
-  .faq-item h3{font-size:16px;margin-bottom:8px}
-  .faq-item p{font-size:14px;color:var(--text-dim)}
+/* ---------- area band ---------- */
+.area{border-top:1px solid var(--line);background:var(--ink-2);display:grid;grid-template-columns:1fr}
+.area-copy{padding:56px var(--gut)}
+.area h2{font-size:clamp(2.6rem,13vw,5.4rem)}
+.area h2 em{font-style:normal;color:var(--yellow)}
+.area p{margin-top:16px;color:var(--mute);max-width:44ch}
+.area-media img{width:100%;aspect-ratio:4/5;max-height:52svh;object-fit:cover}
 
-  footer{padding:36px 24px;text-align:center;border-top:1px solid var(--border)}
-  footer p{font-size:13px;color:var(--text-faint)}
-  footer .logo{justify-content:center;margin-bottom:10px;display:flex}
+/* ---------- form ---------- */
+.form-wrap{max-width:760px}
+form fieldset{border:none;margin-bottom:22px}
+form legend{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--yellow);padding-bottom:12px;border-bottom:1px solid var(--line);width:100%;margin-bottom:18px}
+.row{display:grid;grid-template-columns:1fr;gap:14px}
+@media(min-width:640px){.row.two{grid-template-columns:repeat(2,1fr)}}
+.f label{display:block;font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--mute);margin-bottom:6px}
+.f label .req{color:var(--yellow)}
+.f input,.f select,.f textarea{
+  width:100%;background:#0d0d0d;border:1px solid var(--line);border-radius:2px;
+  padding:14px;font-size:16px;transition:border-color .12s ease;
+}
+.f input:hover,.f select:hover,.f textarea:hover{border-color:rgba(244,242,237,.28)}
+.f textarea{min-height:110px;resize:vertical}
+.f input[type=file]{padding:11px;font-size:14px;color:var(--mute)}
+.f [aria-invalid="true"]{border-color:var(--red)}
+.err{display:none;font-size:13px;color:var(--red);margin-top:6px}
+.err.show{display:block}
+.choice{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.choice label{
+  display:flex;align-items:center;justify-content:center;text-align:center;
+  border:1px solid var(--line);border-radius:2px;padding:13px 8px;cursor:pointer;
+  font-size:13px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--mute);margin:0;
+  transition:all .12s ease;
+}
+.choice input{position:absolute;opacity:0;width:1px;height:1px}
+.choice input:checked+label{background:var(--yellow);border-color:var(--yellow);color:var(--ink)}
+.choice input:focus-visible+label{outline:3px solid var(--yellow);outline-offset:2px}
+.hint{font-size:12.5px;color:var(--mute);margin-top:10px}
+.form-status{margin-top:14px;font-size:14px}
+.form-status.bad{color:var(--red)}
+.success{border:2px solid var(--yellow);background:rgba(245,197,24,.08);padding:34px 26px;border-radius:2px}
+.success h3{font-family:'Archivo Black',sans-serif;text-transform:uppercase;font-size:clamp(1.6rem,6vw,2.4rem);letter-spacing:-.02em;margin-bottom:10px;font-weight:400}
+.success p{color:var(--mute);max-width:44ch}
 
-  @media (max-width:640px){
-    section{padding:48px 0}
-  }
+/* ---------- faq ---------- */
+.faq{border-top:1px solid var(--line);max-width:820px}
+.faq details{border-bottom:1px solid var(--line)}
+.faq summary{
+  display:flex;align-items:center;gap:14px;cursor:pointer;list-style:none;
+  padding:20px 0;font-family:'Archivo Black',sans-serif;text-transform:uppercase;
+  font-size:16px;letter-spacing:-.01em;font-weight:400;
+}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"+";margin-left:auto;color:var(--yellow);font-size:22px;line-height:1;flex:none}
+.faq details[open] summary::after{content:"\2013"}
+.faq details p{padding:0 0 20px;color:var(--mute);font-size:15px;max-width:62ch}
+
+/* ---------- final cta ---------- */
+.final{background:var(--yellow);color:var(--ink);text-align:center}
+.final .wrap{padding-top:76px;padding-bottom:76px}
+.final h2{font-size:clamp(3rem,17vw,9rem);line-height:.84}
+.final p{margin:18px auto 30px;font-weight:700;font-size:clamp(1rem,3.6vw,1.3rem)}
+
+/* ---------- footer ---------- */
+footer{border-top:1px solid var(--line);padding:44px 0 120px}
+@media(min-width:900px){footer{padding-bottom:44px}}
+.foot-top{display:flex;flex-wrap:wrap;gap:26px;align-items:flex-start;justify-content:space-between}
+.foot-nav{display:flex;flex-wrap:wrap;gap:8px 22px}
+.foot-nav a{font-size:13px;color:var(--mute)}
+.foot-nav a:hover{color:var(--paper)}
+.foot-mascot{width:88px;height:auto;flex:none;opacity:.9}
+.foot-bot{margin-top:32px;padding-top:20px;border-top:1px solid var(--line);display:flex;flex-wrap:wrap;gap:6px 18px}
+.foot-bot p{font-size:12px;color:var(--mute)}
+
+/* ---------- sticky mobile cta ---------- */
+.sticky{
+  position:fixed;left:0;right:0;bottom:0;z-index:90;
+  padding:10px 14px calc(10px + env(safe-area-inset-bottom));
+  background:rgba(11,11,11,.94);border-top:1px solid var(--line);backdrop-filter:blur(8px);
+  transform:translateY(110%);transition:transform .22s ease;
+}
+.sticky.on{transform:none}
+.sticky .btn{width:100%}
+@media(min-width:900px){.sticky{display:none}}
+
+/* ---------- image focal points ----------
+   4:5 masters cropped into square / landscape frames: nudge the crop toward the
+   subject when it doesn't sit in the middle of the original frame. */
+img.fp-b{object-position:50% 74%}
+img.fp-t{object-position:50% 12%}
+
+/* ---------- reveal ----------
+   Hiding is armed by the reveal script itself (html.rv-on), never by .js alone,
+   so a script error or an observer that never fires can't leave the page blank.
+   A failsafe timer also force-reveals everything. */
+.rv-on .rv{opacity:0;transform:translateY(16px)}
+.rv-on .rv.in{opacity:1;transform:none;transition:opacity .5s ease,transform .5s cubic-bezier(.2,.7,.3,1)}
+
+@media(min-width:900px){
+  .sec{padding:104px 0}
+  .hdr nav{display:flex}
+  :root{--gut:32px}
+
+  /* split layouts, once there's room for two columns */
+  .hero{grid-template-columns:1.02fr .98fr;min-height:88svh}
+  .hero-media{order:0}
+  .hero-media img{height:100%;max-height:none;aspect-ratio:auto;object-position:52% 42%}
+  .hero-copy{display:flex;flex-direction:column;justify-content:center;align-items:flex-start;padding:64px clamp(32px,4vw,64px)}
+
+  .meme{grid-template-columns:1fr 1fr;align-items:stretch}
+  .meme-media img{height:100%;max-height:none;aspect-ratio:auto;min-height:560px}
+  .meme-copy{padding:64px clamp(32px,4vw,64px)}
+  .meme-flip .meme-media{order:2}
+
+  .area{grid-template-columns:1.1fr .9fr;align-items:center}
+  .area-copy{padding:96px clamp(32px,4vw,64px)}
+  .area-media img{height:100%;max-height:none;aspect-ratio:auto;min-height:460px}
+}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important}
+  .ticker div{animation:none}
+  .rv-on .rv{opacity:1;transform:none}
+}
 </style>
 </head>
 <body>
+<a class="skip" href="#fix">Skip to repair request</a>
 
-<header>
+<header class="hdr">
   <div class="wrap">
-    <div class="logo">FIX<span>3D</span></div>
+    <a class="mark" href="#top" aria-label="FIX3D home">FIX<i>3D</i></a>
+    <nav aria-label="Primary">
+      <a href="#failures">Failures</a>
+      <a href="#services">Services</a>
+      <a href="#how">How it works</a>
+      <a href="#faq">FAQ</a>
+    </nav>
+    <a class="btn" href="#fix" data-cta="header">Fix my printer</a>
   </div>
 </header>
 
-<section class="hero">
-  <div class="wrap">
-    <div class="eyebrow">North NJ &middot; Drop-off &amp; On-Site</div>
-    <h1 class="headline-font">3D Printer Down?<br><span class="accent">We'll Get It Printing Again.</span></h1>
-    <p class="sub">Troubleshooting <span class="dot">&bull;</span> Repair <span class="dot">&bull;</span> Maintenance <span class="dot">&bull;</span> Calibration</p>
-    <a href="#contact" class="btn-primary">Message Us to Schedule Service</a>
-    <div class="badges">
-      <span>&#10003; Bambu Lab</span>
-      <span>&#10003; FDM / Filament</span>
-      <span>&#10003; Resin</span>
-      <span>&#10003; Large-Format</span>
-      <span>&#10003; Print Farms</span>
+<main id="top">
+
+  <!-- ============ HERO ============ -->
+  <section class="hero">
+    <div class="hero-media">
+      <picture>
+        <source srcset="images/failed-prints/hero-dragon.webp" type="image/webp">
+        <img src="images/failed-prints/hero-dragon.jpg" width="1100" height="1375"
+             alt="A yellow 3D printed dragon, perfectly formed except for its head, which printed as a tangled nest of filament"
+             fetchpriority="high" decoding="async">
+      </picture>
     </div>
-
-    <div class="hero-art">
-      <img src="images/fix3d-mascot-cutout.png" alt="Angry cartoon FIX3D printer robot yanking a tangled, jammed filament roll out of its own spool holder" loading="eager">
+    <div class="hero-copy">
+      <p class="hero-kicker lbl"><span aria-hidden="true"></span>North NJ &middot; 3D printer repair</p>
+      <h1 class="d">This was supposed to be a dragon.</h1>
+      <p class="stamp">Print happens.</p>
+      <p class="said">We fix 3D printers.</p>
+      <a class="btn btn-lg" href="#fix" data-cta="hero">Fix my printer <span aria-hidden="true">&rarr;</span></a>
+      <ul class="hero-meta lbl">
+        <li>North NJ</li>
+        <li>Drop-off + on-site</li>
+        <li>FDM &middot; Resin &middot; Print farms</li>
+      </ul>
     </div>
-  </div>
-</section>
+  </section>
 
-<div class="type-strip">
-  <div class="wrap">
-    <span class="type-pill">Bambu Lab printers</span>
-    <span class="type-pill">FDM / filament printers</span>
-    <span class="type-pill">Resin printers</span>
-    <span class="type-pill">Large-format &amp; specialty machines</span>
-    <span class="type-pill">Print farms &amp; multi-printer setups</span>
-  </div>
-</div>
-
-<section>
-  <div class="wrap">
-    <h2 class="section-title">We've Seen It All</h2>
-    <p class="section-sub">If your printer's giving you trouble, chances are we've already fixed this exact problem.</p>
-    <div class="problem-block">
-      <p><strong>Clogs.</strong> <strong>Bad first layers.</strong> <strong>Extrusion problems.</strong> <strong>Failed prints.</strong> <strong>Belt issues.</strong> <strong>Calibration problems.</strong> <strong>Electronics.</strong> <strong>Preventive maintenance.</strong></p>
+  <div class="ticker" aria-hidden="true">
+    <div>
+      <p><span>&#10033;</span>Print happens<span>&#10033;</span>Spaghetti belongs on a plate<span>&#10033;</span>We&rsquo;ve seen worse<span>&#10033;</span>It was fine when I went to bed<span>&#10033;</span>Print happens<span>&#10033;</span>Spaghetti belongs on a plate<span>&#10033;</span>We&rsquo;ve seen worse<span>&#10033;</span>It was fine when I went to bed</p>
+      <p><span>&#10033;</span>Print happens<span>&#10033;</span>Spaghetti belongs on a plate<span>&#10033;</span>We&rsquo;ve seen worse<span>&#10033;</span>It was fine when I went to bed<span>&#10033;</span>Print happens<span>&#10033;</span>Spaghetti belongs on a plate<span>&#10033;</span>We&rsquo;ve seen worse<span>&#10033;</span>It was fine when I went to bed</p>
     </div>
   </div>
-</section>
 
-<section>
-  <div class="wrap">
-    <h2 class="section-title">We Service</h2>
-    <p class="section-sub">Every machine type, from a single hobby printer to a full print farm.</p>
-    <div class="services">
-      <div class="service-card">
-        <h3>Bambu Lab printers</h3>
-        <p>X1, P1, A1 series diagnostics, repair &amp; calibration.</p>
+  <!-- ============ WHAT DID IT DO? ============ -->
+  <section class="sec" id="failures">
+    <div class="wrap">
+      <div class="sec-head rv">
+        <p class="lbl">Step 01 &mdash; Identify it</p>
+        <h2 class="d h2">What did it do?</h2>
+        <p>You don&rsquo;t need the right words for it. Point at the one that looks like your problem.</p>
       </div>
-      <div class="service-card">
-        <h3>FDM / filament printers</h3>
-        <p>Extrusion, bed leveling, belts, electronics &amp; more.</p>
-      </div>
-      <div class="service-card">
-        <h3>Resin printers</h3>
-        <p>Exposure calibration, LCD/FEP issues, curing problems.</p>
-      </div>
-      <div class="service-card">
-        <h3>Large-format &amp; specialty machines</h3>
-        <p>Industrial &amp; oversized machines, on-site where needed.</p>
-      </div>
-      <div class="service-card">
-        <h3>Print farms &amp; multi-printer setups</h3>
-        <p>Fleet maintenance plans to keep every unit running.</p>
+      <div class="failgrid">
+
+        <a class="fail rv" href="#fix" data-issue="spaghetti">
+          <figure>
+            <picture>
+        <source srcset="images/failed-prints/f01-spaghetti.webp" type="image/webp">
+        <img src="images/failed-prints/f01-spaghetti.jpg" width="760" height="760"
+             alt="A tangle of electric blue filament piled on a print bed after the print detached mid-job"
+             loading="lazy" decoding="async">
+      </picture>
+            <figcaption>F-01</figcaption>
+          </figure>
+          <div class="body">
+            <div><h3>Spaghetti</h3><p>It let go mid-print and kept extruding. Filament everywhere.</p></div>
+            <span class="arrow" aria-hidden="true">&rarr;</span>
+          </div>
+        </a>
+
+        <a class="fail rv" href="#fix" data-issue="blob">
+          <figure>
+            <picture>
+        <source srcset="images/failed-prints/f02-blob.webp" type="image/webp">
+        <img src="images/failed-prints/f02-blob.jpg" width="760" height="760"
+             alt="A printer hotend completely encased in a hardened orange blob of melted filament"
+             loading="lazy" decoding="async">
+      </picture>
+            <figcaption>F-02</figcaption>
+          </figure>
+          <div class="body">
+            <div><h3>Blob of death</h3><p>Material wrapped the hotend and cooled into a rock.</p></div>
+            <span class="arrow" aria-hidden="true">&rarr;</span>
+          </div>
+        </a>
+
+        <a class="fail rv" href="#fix" data-issue="adhesion">
+          <figure>
+            <picture>
+        <source srcset="images/failed-prints/f03-adhesion.webp" type="image/webp">
+        <img src="images/failed-prints/f03-adhesion.jpg" width="760" height="760"
+             alt="A red first layer that lifted off the black print bed, leaving loose strands and gaps"
+             loading="lazy" decoding="async">
+      </picture>
+            <figcaption>F-03</figcaption>
+          </figure>
+          <div class="body">
+            <div><h3>Won&rsquo;t stick</h3><p>First layer curls, lifts, or never goes down clean.</p></div>
+            <span class="arrow" aria-hidden="true">&rarr;</span>
+          </div>
+        </a>
+
+        <a class="fail rv" href="#fix" data-issue="layer-shift">
+          <figure>
+            <picture>
+        <source srcset="images/failed-prints/f04-layer-shift.webp" type="image/webp">
+        <img src="images/failed-prints/f04-layer-shift.jpg" width="760" height="760"
+             alt="A green printed bust with a hard sideways layer shift running through it"
+             loading="lazy" decoding="async">
+      </picture>
+            <figcaption>F-04</figcaption>
+          </figure>
+          <div class="body">
+            <div><h3>It shifted</h3><p>The model slid sideways. Belts, steppers, or something mechanical.</p></div>
+            <span class="arrow" aria-hidden="true">&rarr;</span>
+          </div>
+        </a>
+
+        <a class="fail rv" href="#fix" data-issue="no-extrusion">
+          <figure>
+            <picture>
+        <source srcset="images/failed-prints/f05-no-extrusion.webp" type="image/webp">
+        <img class="fp-t" src="images/failed-prints/f05-no-extrusion.jpg" width="760" height="760"
+             alt="A nozzle hanging over a black print, producing nothing but a thin wisp as the print starves out into loose strands"
+             loading="lazy" decoding="async">
+      </picture>
+            <figcaption>F-05</figcaption>
+          </figure>
+          <div class="body">
+            <div><h3>Nothing comes out</h3><p>Clog, grinding extruder, or filament that won&rsquo;t feed.</p></div>
+            <span class="arrow" aria-hidden="true">&rarr;</span>
+          </div>
+        </a>
+
+        <a class="fail rv" href="#fix" data-issue="no-power">
+          <figure>
+            <picture>
+        <source srcset="images/failed-prints/f06-no-power.webp" type="image/webp">
+        <img src="images/failed-prints/f06-no-power.jpg" width="760" height="760"
+             alt="A 3D printer opened up on a workbench with its electronics exposed and tools laid out"
+             loading="lazy" decoding="async">
+      </picture>
+            <figcaption>F-06</figcaption>
+          </figure>
+          <div class="body">
+            <div><h3>Won&rsquo;t turn on</h3><p>Dead screen, dead board, or power that comes and goes.</p></div>
+            <span class="arrow" aria-hidden="true">&rarr;</span>
+          </div>
+        </a>
+
       </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<section>
-  <div class="wrap">
-    <h2 class="section-title">How It Works</h2>
-    <div class="steps">
-      <div class="step">
-        <div class="num">1</div>
-        <h3>Diagnose</h3>
-        <p>Tell us what's happening — we find the real issue, not just the symptom.</p>
+  <!-- ============ MEME INTERRUPT 01 ============ -->
+  <section class="meme" aria-labelledby="m1">
+    <div class="meme-media">
+      <picture>
+        <source srcset="images/failed-prints/m01-half-a-face.webp" type="image/webp">
+        <img src="images/failed-prints/m01-half-a-face.jpg" width="1100" height="1375"
+             alt="A blue printed bust of Michelangelo's David: one half flawless, the other half collapsed into a shell of loose stringing"
+             loading="lazy" decoding="async">
+      </picture>
+    </div>
+    <div class="meme-copy">
+      <h2 class="d" id="m1">It was fine when I went to bed.</h2>
+      <a class="sig" href="#fix" data-cta="meme-1">fix3d.co</a>
+    </div>
+  </section>
+
+  <!-- ============ SERVICES ============ -->
+  <section class="sec paper" id="services">
+    <div class="wrap">
+      <div class="sec-head rv">
+        <p class="lbl">Step 02 &mdash; The actual work</p>
+        <h2 class="d h2">OK. We actually fix these things.</h2>
+        <p>The jokes are free. The repair is the job.</p>
       </div>
-      <div class="step">
-        <div class="num">2</div>
-        <h3>Fix</h3>
-        <p>Repair, part swap, rewiring, or a full calibration pass — whatever it needs.</p>
-      </div>
-      <div class="step">
-        <div class="num">3</div>
-        <h3>Back to Printing</h3>
-        <p>You get your printer back dialed in and producing clean parts again.</p>
+
+      <ul class="svc rv">
+        <li><span class="n">01</span><div><h3>Diagnostics</h3><p>Find the real fault instead of the symptom you can see.</p></div></li>
+        <li><span class="n">02</span><div><h3>Mechanical repair</h3><p>Belts, rails, bearings, gantries, frames, motion problems.</p></div></li>
+        <li><span class="n">03</span><div><h3>Extrusion &amp; hotend</h3><p>Clogs, blobs, heat creep, extruder and feed problems.</p></div></li>
+        <li><span class="n">04</span><div><h3>Calibration</h3><p>Bed, flow, E-steps, offsets, tuning &mdash; dialed back in.</p></div></li>
+        <li><span class="n">05</span><div><h3>Electronics troubleshooting</h3><p>Boards, wiring, sensors, thermistors, power, dead machines.</p></div></li>
+        <li><span class="n">06</span><div><h3>Preventive maintenance</h3><p>Service before it fails, including recurring fleet upkeep.</p></div></li>
+      </ul>
+
+      <div class="cover rv">
+        <p class="cover-hd lbl">Machines we service</p>
+        <ul>
+          <li>Bambu Lab printers</li>
+          <li>FDM / filament printers</li>
+          <li>Resin printers</li>
+          <li>Large-format machines</li>
+          <li>Specialty machines</li>
+          <li>Print farms &amp; multi-printer setups</li>
+        </ul>
       </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<div class="area-band">
-  <h2 class="headline-font">Serving North NJ</h2>
-  <p>Drop-off &amp; on-site service available in NJ.</p>
-</div>
+  <!-- ============ MEME INTERRUPT 02 ============ -->
+  <section class="meme meme-light meme-flip" aria-labelledby="m2">
+    <div class="meme-media">
+      <picture>
+        <source srcset="images/failed-prints/m02-benchy.webp" type="image/webp">
+        <img class="fp-b" src="images/failed-prints/m02-benchy.jpg" width="1100" height="1375"
+             alt="Three 3DBenchy test boats on a print bed, each one printed badly enough to collapse"
+             loading="lazy" decoding="async">
+      </picture>
+    </div>
+    <div class="meme-copy">
+      <h2 class="d" id="m2">The boat has sunk.</h2>
+      <p class="sub">You&rsquo;ve leveled the bed fourteen times. Maybe it isn&rsquo;t the bed.</p>
+      <a class="sig" href="#fix" data-cta="meme-2">fix3d.co</a>
+    </div>
+  </section>
 
-<div class="cta-band">
-  <h2 class="headline-font">Stop fighting with your printer. <span class="accent">Let us diagnose it, fix it, and get you back to printing.</span></h2>
-</div>
+  <!-- ============ HOW IT WORKS ============ -->
+  <section class="sec paper" id="how">
+    <div class="wrap">
+      <div class="sec-head rv">
+        <p class="lbl">Step 03 &mdash; The process</p>
+        <h2 class="d h2">How it works</h2>
+      </div>
+      <ol class="steps rv">
+        <li>
+          <span class="n">01</span>
+          <h3>Show us the damage</h3>
+          <p>Tell us the printer, the model, and what it did. Photos help more than paragraphs.</p>
+        </li>
+        <li>
+          <span class="n">02</span>
+          <h3>We diagnose + fix it</h3>
+          <p>Repair, part replacement, calibration or maintenance &mdash; whatever the actual fault turns out to be.</p>
+        </li>
+        <li>
+          <span class="n">03</span>
+          <h3>Get back to printing</h3>
+          <p>The machine goes back to you working and dialed in.</p>
+        </li>
+      </ol>
+    </div>
+  </section>
 
-<section id="contact">
-  <div class="wrap">
-    <h2 class="section-title">Message Us to Schedule Service</h2>
-    <p class="section-sub">Tell us what's going on and we'll get back to you with next steps.</p>
+  <!-- ============ SERVICE AREA ============ -->
+  <section class="area" id="area">
+    <div class="area-copy">
+      <p class="lbl rv">Service area</p>
+      <h2 class="d rv">North <em>NJ</em></h2>
+      <p class="rv">Drop-off and on-site service are both available. Which one makes sense depends on the machine and the fault &mdash; tell us what you&rsquo;ve got and we&rsquo;ll sort it out.</p>
+      <p class="rv">Single machines, workshops, and print farms where one unit is always the problem child.</p>
+    </div>
+    <div class="area-media">
+      <picture>
+        <source srcset="images/repairs/print-farm.webp" type="image/webp">
+        <img src="images/repairs/print-farm.jpg" width="1100" height="1375"
+             alt="A rack of 3D printers running as a print farm, with one machine full of failed pink filament"
+             loading="lazy" decoding="async">
+      </picture>
+    </div>
+  </section>
 
-    <div class="form-card">
-      <!--
-        PLACEHOLDER — contact routing not finalized yet.
-        Right now this form opens the visitor's email client via a mailto: link
-        (works instantly, zero setup, but requires the visitor to hit "send" in
-        their own mail app). Swap this out once a platform/number is chosen:
-          - Formspree / Netlify Forms / Getform → just change the <form> action
-            and method, remove the JS mailto handler below.
-          - Text/SMS (Google Voice) → replace this form with a single
-            <a href="sms:+1XXXXXXXXXX"> button like PuffcoClean uses.
-          - Facebook Messenger → swap for an <a href="https://m.me/PAGE"> button.
-      -->
-      <form id="contact-form">
-        <div class="field">
-          <label for="name">Name</label>
-          <input type="text" id="name" name="name" required>
+  <!-- ============ REPAIR INTAKE ============ -->
+  <section class="sec" id="fix">
+    <div class="wrap">
+      <div class="sec-head rv">
+        <p class="lbl">Repair request</p>
+        <h2 class="d h2">Fix my printer</h2>
+        <p>Six things we actually need. No essay required.</p>
+      </div>
+
+      <div class="form-wrap rv">
+        <!--
+          FORM BACKEND — integration boundary.
+          Nothing is hardcoded here. Set window.FIX3D_CONFIG.formEndpoint (see the
+          config block at the bottom of this file) to a real endpoint and this form
+          POSTs multipart/form-data to it. Until then it refuses to submit and says so,
+          rather than silently dropping leads (the old mailto: flow is gone on purpose).
+          Verified-compatible options: Formspree, Netlify Forms, Getform, Basin, Web3Forms.
+          File uploads only work on a backend that accepts multipart — see README.md.
+        -->
+        <form id="repair-form" novalidate>
+          <fieldset>
+            <legend>01 &mdash; You</legend>
+            <div class="row two">
+              <div class="f">
+                <label for="name">Name <span class="req" aria-hidden="true">*</span></label>
+                <input id="name" name="name" type="text" autocomplete="name" required>
+                <p class="err" id="err-name"></p>
+              </div>
+              <div class="f">
+                <label for="phone">Phone <span class="req" aria-hidden="true">*</span></label>
+                <input id="phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" required>
+                <p class="err" id="err-phone"></p>
+              </div>
+              <div class="f">
+                <label for="email">Email <span class="req" aria-hidden="true">*</span></label>
+                <input id="email" name="email" type="email" inputmode="email" autocomplete="email" required>
+                <p class="err" id="err-email"></p>
+              </div>
+              <div class="f">
+                <label for="zip">ZIP code <span class="req" aria-hidden="true">*</span></label>
+                <input id="zip" name="zip" type="text" inputmode="numeric" autocomplete="postal-code"
+                       pattern="[0-9]{5}" maxlength="5" required>
+                <p class="err" id="err-zip"></p>
+              </div>
+            </div>
+          </fieldset>
+
+          <fieldset>
+            <legend>02 &mdash; The machine</legend>
+            <div class="row two">
+              <div class="f">
+                <label for="make">Manufacturer</label>
+                <input id="make" name="make" type="text" list="makes" placeholder="Bambu Lab">
+                <datalist id="makes">
+                  <option value="Bambu Lab"></option>
+                  <option value="Prusa"></option>
+                  <option value="Creality"></option>
+                  <option value="Elegoo"></option>
+                  <option value="Anycubic"></option>
+                  <option value="Ultimaker"></option>
+                  <option value="Raise3D"></option>
+                  <option value="Formlabs"></option>
+                  <option value="Voron / self-built"></option>
+                  <option value="Other"></option>
+                </datalist>
+              </div>
+              <div class="f">
+                <label for="model">Model</label>
+                <input id="model" name="model" type="text" placeholder="X1-Carbon">
+              </div>
+            </div>
+          </fieldset>
+
+          <fieldset>
+            <legend>03 &mdash; What happened</legend>
+            <div class="f" style="margin-bottom:14px">
+              <label for="issue">What did it do? <span class="req" aria-hidden="true">*</span></label>
+              <select id="issue" name="issue" required>
+                <option value="">Pick the closest one&hellip;</option>
+                <option value="spaghetti">F-01 &mdash; Spaghetti / print detached</option>
+                <option value="blob">F-02 &mdash; Blob of death / material on the hotend</option>
+                <option value="adhesion">F-03 &mdash; Won&rsquo;t stick / first layer</option>
+                <option value="layer-shift">F-04 &mdash; It shifted / mechanical</option>
+                <option value="no-extrusion">F-05 &mdash; Nothing comes out / clog</option>
+                <option value="no-power">F-06 &mdash; Won&rsquo;t turn on / electrical</option>
+                <option value="maintenance">Maintenance or calibration, nothing broken</option>
+                <option value="unknown">I have no idea</option>
+              </select>
+              <p class="err" id="err-issue"></p>
+            </div>
+            <div class="f">
+              <label for="details">Tell us what happened <span class="req" aria-hidden="true">*</span></label>
+              <textarea id="details" name="details" required
+                placeholder="A couple of sentences is plenty. When did it start, what have you already tried?"></textarea>
+              <p class="err" id="err-details"></p>
+            </div>
+            <div class="f" style="margin-top:14px">
+              <label for="photos">Photos or video of the damage</label>
+              <input id="photos" name="photos" type="file" accept="image/*,video/*" multiple>
+              <p class="hint">Optional, but a photo usually beats a paragraph. Uploads require a connected form backend &mdash; see README.</p>
+            </div>
+          </fieldset>
+
+          <fieldset>
+            <legend>04 &mdash; Service</legend>
+            <div class="choice" role="radiogroup" aria-label="Preferred service type">
+              <input type="radio" id="sv-drop" name="service" value="Drop-off" checked><label for="sv-drop">Drop-off</label>
+              <input type="radio" id="sv-site" name="service" value="On-site"><label for="sv-site">On-site</label>
+              <input type="radio" id="sv-idk" name="service" value="Not sure"><label for="sv-idk">Not sure</label>
+            </div>
+          </fieldset>
+
+          <!-- campaign attribution, populated by JS from the URL -->
+          <input type="hidden" name="utm_source"><input type="hidden" name="utm_medium">
+          <input type="hidden" name="utm_campaign"><input type="hidden" name="utm_content">
+          <input type="hidden" name="utm_term"><input type="hidden" name="fbclid">
+          <input type="hidden" name="referrer"><input type="hidden" name="landing_page">
+          <input type="hidden" name="_subject" value="FIX3D repair request">
+          <!-- simple bot honeypot; real submissions leave this empty -->
+          <div style="position:absolute;left:-9999px" aria-hidden="true">
+            <label for="company">Company</label>
+            <input id="company" name="company" type="text" tabindex="-1" autocomplete="off">
+          </div>
+
+          <button class="btn btn-lg" type="submit">Send it &rarr;</button>
+          <p class="form-status" id="form-status" role="status" aria-live="polite"></p>
+        </form>
+
+        <div class="success" id="form-success" hidden>
+          <h3>Got it.</h3>
+          <p>Your request is in. We&rsquo;ll come back to you about what it needs and whether it&rsquo;s a drop-off or an on-site job.</p>
         </div>
-        <div class="field">
-          <label for="phone">Phone</label>
-          <input type="tel" id="phone" name="phone" required>
-        </div>
-        <div class="field">
-          <label for="printer">Printer brand / model</label>
-          <input type="text" id="printer" name="printer" placeholder="e.g. Bambu Lab X1-Carbon">
-        </div>
-        <div class="field">
-          <label for="issue">What's going on?</label>
-          <textarea id="issue" name="issue" placeholder="Clogs, bad first layers, failed prints, belt issues, calibration..." required></textarea>
-        </div>
-        <button type="submit" class="btn-submit">Message Us to Schedule Service</button>
-      </form>
-      <p class="form-note">This opens your email app to send us the details — we'll reply to set up drop-off or on-site service.</p>
+      </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<section>
-  <div class="wrap">
-    <h2 class="section-title">FAQ</h2>
-    <div style="max-width:720px;margin:0 auto">
-      <div class="faq-item">
-        <h3>What areas do you serve?</h3>
-        <p>North NJ. Drop-off and on-site service are both available depending on the issue and machine.</p>
+  <!-- ============ FAQ ============ -->
+  <section class="sec" id="faq">
+    <div class="wrap">
+      <div class="sec-head rv">
+        <p class="lbl">Questions</p>
+        <h2 class="d h2">FAQ</h2>
       </div>
-      <div class="faq-item">
-        <h3>What printers do you work on?</h3>
-        <p>Bambu Lab, FDM/filament printers, resin printers, large-format and specialty machines, and full print farms.</p>
-      </div>
-      <div class="faq-item">
-        <h3>What kind of problems can you fix?</h3>
-        <p>Clogs, bad first layers, extrusion problems, failed prints, belt issues, calibration problems, electronics, and preventive maintenance.</p>
-      </div>
-      <div class="faq-item">
-        <h3>How do I get started?</h3>
-        <p>Message us with what's going on and we'll get back to you to schedule service.</p>
+      <div class="faq rv">
+        <details>
+          <summary>What areas do you serve?</summary>
+          <p>North NJ. Drop-off and on-site service are both available, depending on the issue and the machine.</p>
+        </details>
+        <details>
+          <summary>What printers do you work on?</summary>
+          <p>Bambu Lab, FDM/filament printers, resin printers, large-format and specialty machines, and full print farms.</p>
+        </details>
+        <details>
+          <summary>What kind of problems can you fix?</summary>
+          <p>Clogs, bad first layers, extrusion problems, failed prints, belt and mechanical issues, layer shifting, calibration problems, electronics, and preventive maintenance.</p>
+        </details>
+        <details>
+          <summary>What does it cost?</summary>
+          <p>It depends on the machine and what&rsquo;s actually wrong with it. Send the request through and we&rsquo;ll tell you what it needs before anything happens.</p>
+        </details>
+        <details>
+          <summary>How long does it take?</summary>
+          <p>That depends on the fault and on parts. We&rsquo;ll give you a straight answer once we&rsquo;ve diagnosed it, not before.</p>
+        </details>
+        <details>
+          <summary>I don&rsquo;t know what&rsquo;s wrong with it. Is that a problem?</summary>
+          <p>No. Diagnosing it is the job. Pick &ldquo;I have no idea&rdquo; on the form and describe what you&rsquo;re seeing.</p>
+        </details>
+        <details>
+          <summary>How do I get started?</summary>
+          <p>Fill out the repair request with what&rsquo;s going on and we&rsquo;ll get back to you to schedule service.</p>
+        </details>
       </div>
     </div>
-  </div>
-</section>
+  </section>
+
+  <!-- ============ FINAL CTA ============ -->
+  <section class="final on-yellow">
+    <div class="wrap">
+      <h2 class="d">Print happens.</h2>
+      <p>We fix 3D printers. North NJ &mdash; drop-off &amp; on-site.</p>
+      <a class="btn btn-ink btn-lg" href="#fix" data-cta="final">Fix my printer &rarr;</a>
+    </div>
+  </section>
+
+</main>
 
 <footer>
-  <div class="logo"><div class="logo" style="margin:0">FIX<span style="color:var(--yellow)">3D</span></div></div>
-  <p>North NJ &middot; Drop-off &amp; on-site service available &middot; &copy; <span id="year"></span> FIX3D</p>
+  <div class="wrap">
+    <div class="foot-top">
+      <div>
+        <p class="mark">FIX<i>3D</i></p>
+        <p class="lbl" style="margin-top:8px">fix3d.co &mdash; we fix 3D printers</p>
+      </div>
+      <nav class="foot-nav" aria-label="Footer">
+        <a href="#failures">Failures</a>
+        <a href="#services">Services</a>
+        <a href="#how">How it works</a>
+        <a href="#faq">FAQ</a>
+        <a href="#fix">Fix my printer</a>
+      </nav>
+        <img class="foot-mascot" src="images/fix3d-mascot-sm.png" width="197" height="300" loading="lazy" decoding="async"
+             alt="FIX3D mascot: a cartoon printer wrestling a tangled spool of filament">
+    </div>
+    <div class="foot-bot">
+      <p>&copy; <span id="yr"></span> FIX3D</p>
+      <p>North NJ &middot; Drop-off &amp; on-site service</p>
+    </div>
+  </div>
 </footer>
 
-<script>
-  document.getElementById('year').textContent = new Date().getFullYear();
+<div class="sticky" id="sticky">
+  <a class="btn" href="#fix" data-cta="sticky">Fix my printer &rarr;</a>
+</div>
 
-  // PLACEHOLDER routing — see comment above the <form> for how to replace this.
-  document.getElementById('contact-form').addEventListener('submit', function(e){
-    e.preventDefault();
-    var name = document.getElementById('name').value;
-    var phone = document.getElementById('phone').value;
-    var printer = document.getElementById('printer').value;
-    var issue = document.getElementById('issue').value;
-    var subject = encodeURIComponent('FIX3D service request from ' + name);
-    var body = encodeURIComponent(
-      'Name: ' + name + '\n' +
-      'Phone: ' + phone + '\n' +
-      'Printer: ' + printer + '\n\n' +
-      'Issue:\n' + issue
-    );
-    // PLACEHOLDER EMAIL — replace with the real inbox this business should use.
-    window.location.href = 'mailto:YOUR-EMAIL-HERE@example.com?subject=' + subject + '&body=' + body;
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@type":"ProfessionalService",
+  "name":"FIX3D",
+  "alternateName":"FIX3D.CO",
+  "description":"3D printer diagnosis, repair, maintenance and calibration for Bambu Lab, FDM, resin, large-format and print-farm machines. Drop-off and on-site service in North New Jersey.",
+  "url":"https://fix3d.co/",
+  "image":"https://fix3d.co/images/social/og-image.jpg",
+  "areaServed":{"@type":"AdministrativeArea","name":"North New Jersey"},
+  "serviceType":["3D printer repair","3D printer maintenance","3D printer calibration","3D printer diagnostics"],
+  "availableChannel":{"@type":"ServiceChannel","serviceUrl":"https://fix3d.co/#fix"}
+}
+</script>
+<!--
+  STRUCTURED DATA NOTE: "telephone", "address" and "aggregateRating" are deliberately
+  omitted. Add telephone/address only when real ones exist; never add ratings without
+  real, verifiable reviews.
+-->
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@type":"FAQPage",
+  "mainEntity":[
+    {"@type":"Question","name":"What areas do you serve?","acceptedAnswer":{"@type":"Answer","text":"North NJ. Drop-off and on-site service are both available, depending on the issue and the machine."}},
+    {"@type":"Question","name":"What printers do you work on?","acceptedAnswer":{"@type":"Answer","text":"Bambu Lab, FDM/filament printers, resin printers, large-format and specialty machines, and full print farms."}},
+    {"@type":"Question","name":"What kind of problems can you fix?","acceptedAnswer":{"@type":"Answer","text":"Clogs, bad first layers, extrusion problems, failed prints, belt and mechanical issues, layer shifting, calibration problems, electronics, and preventive maintenance."}},
+    {"@type":"Question","name":"What does it cost?","acceptedAnswer":{"@type":"Answer","text":"It depends on the machine and what is actually wrong with it. Send the request through and we will tell you what it needs before anything happens."}},
+    {"@type":"Question","name":"How long does it take?","acceptedAnswer":{"@type":"Answer","text":"That depends on the fault and on parts. We give you a straight answer once we have diagnosed it, not before."}},
+    {"@type":"Question","name":"How do I get started?","acceptedAnswer":{"@type":"Answer","text":"Fill out the repair request with what is going on and we will get back to you to schedule service."}}
+  ]
+}
+</script>
+
+<script>
+/* =====================================================================
+   FIX3D — configuration.
+   Everything that needs a real account lives here and NOWHERE else.
+   No IDs, endpoints or credentials are invented. Null = not connected yet.
+   See README.md for how to fill each one in.
+   ===================================================================== */
+window.FIX3D_CONFIG = {
+  // e.g. 'https://formspree.io/f/xxxxxxxx' — must accept multipart/form-data for photo uploads
+  formEndpoint: null,
+  // e.g. '1234567890123456' — from Meta Events Manager
+  metaPixelId: null,
+  // set true once the endpoint above is confirmed to store file uploads
+  uploadsEnabled: false
+};
+
+(function () {
+  'use strict';
+  var CFG = window.FIX3D_CONFIG;
+  var $  = function (s, c) { return (c || document).querySelector(s); };
+  var $$ = function (s, c) { return Array.prototype.slice.call((c || document).querySelectorAll(s)); };
+
+  /* ---------- Meta Pixel (loads only if an ID is configured) ---------- */
+  if (CFG.metaPixelId) {
+    !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+    n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}
+    (window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
+    window.fbq('init', CFG.metaPixelId);
+    window.fbq('track', 'PageView');
+  }
+  // Safe no-op wrapper: every call below works whether or not the pixel exists.
+  function track(name, standard, params) {
+    if (typeof window.fbq !== 'function') return;
+    window.fbq(standard ? 'track' : 'trackCustom', name, params || {});
+  }
+
+  /* ---------- year ---------- */
+  $('#yr').textContent = new Date().getFullYear();
+
+  /* ---------- UTM / campaign attribution ---------- */
+  var KEYS = ['utm_source','utm_medium','utm_campaign','utm_content','utm_term','fbclid'];
+  var qs = new URLSearchParams(location.search);
+  var store = {};
+  try { store = JSON.parse(sessionStorage.getItem('fix3d_attr') || '{}'); } catch (e) { store = {}; }
+  KEYS.forEach(function (k) { if (qs.get(k)) store[k] = qs.get(k); });
+  try { sessionStorage.setItem('fix3d_attr', JSON.stringify(store)); } catch (e) {}
+  var form = $('#repair-form');
+  KEYS.forEach(function (k) {
+    var el = form.elements[k];
+    if (el) el.value = store[k] || '';
   });
+  form.elements.referrer.value = document.referrer || '';
+  form.elements.landing_page.value = location.pathname + location.search;
+
+  /* ---------- failure cards → preselect the problem ---------- */
+  $$('.fail').forEach(function (card) {
+    card.addEventListener('click', function () {
+      var v = card.getAttribute('data-issue');
+      var sel = $('#issue');
+      sel.value = v;
+      sel.dispatchEvent(new Event('change', { bubbles: true }));
+      track('FailureCardClick', false, { failure: v });
+      // move keyboard focus into the form, not just the scroll position
+      setTimeout(function () { $('#name').focus({ preventScroll: true }); }, 420);
+    });
+  });
+
+  /* ---------- CTA tracking ---------- */
+  $$('[data-cta]').forEach(function (el) {
+    el.addEventListener('click', function () {
+      track('CTAClick', false, { location: el.getAttribute('data-cta') });
+    });
+  });
+
+  /* ---------- form-start event (fires once) ---------- */
+  var started = false;
+  form.addEventListener('input', function () {
+    if (started) return;
+    started = true;
+    track('RepairFormStart', false, {});
+  }, { once: false });
+
+  /* ---------- validation ---------- */
+  var RULES = {
+    name:    { msg: 'We need a name to put on the job.', test: function (v) { return v.trim().length > 1; } },
+    phone:   { msg: 'A reachable phone number, please.', test: function (v) { return v.replace(/\D/g, '').length >= 10; } },
+    email:   { msg: 'That email address doesn’t look right.', test: function (v) { return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v.trim()); } },
+    zip:     { msg: 'Five-digit ZIP so we know if you’re in range.', test: function (v) { return /^\d{5}$/.test(v.trim()); } },
+    issue:   { msg: 'Pick the closest one — “I have no idea” counts.', test: function (v) { return v !== ''; } },
+    details: { msg: 'A sentence or two about what it did.', test: function (v) { return v.trim().length > 4; } }
+  };
+
+  function setError(field, message) {
+    var input = form.elements[field];
+    var box = $('#err-' + field);
+    if (message) {
+      input.setAttribute('aria-invalid', 'true');
+      input.setAttribute('aria-describedby', 'err-' + field);
+      box.textContent = message;
+      box.classList.add('show');
+    } else {
+      input.removeAttribute('aria-invalid');
+      input.removeAttribute('aria-describedby');
+      box.textContent = '';
+      box.classList.remove('show');
+    }
+  }
+
+  Object.keys(RULES).forEach(function (field) {
+    var input = form.elements[field];
+    input.addEventListener('blur', function () {
+      if (input.value !== '') setError(field, RULES[field].test(input.value) ? '' : RULES[field].msg);
+    });
+    input.addEventListener('input', function () {
+      if (input.getAttribute('aria-invalid') === 'true' && RULES[field].test(input.value)) setError(field, '');
+    });
+  });
+
+  function validate() {
+    var firstBad = null;
+    Object.keys(RULES).forEach(function (field) {
+      var ok = RULES[field].test(form.elements[field].value);
+      setError(field, ok ? '' : RULES[field].msg);
+      if (!ok && !firstBad) firstBad = field;
+    });
+    return firstBad;
+  }
+
+  /* ---------- submit ---------- */
+  var status = $('#form-status');
+  var submitBtn = form.querySelector('button[type=submit]');
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    status.textContent = '';
+    status.classList.remove('bad');
+
+    // honeypot: bots fill every field, humans never see this one
+    if (form.elements.company.value !== '') { showSuccess(); return; }
+
+    var bad = validate();
+    if (bad) {
+      status.textContent = 'A couple of fields still need you.';
+      status.classList.add('bad');
+      form.elements[bad].focus();
+      return;
+    }
+
+    if (!CFG.formEndpoint) {
+      // Deliberate: no silent failure, and no mailto: fallback in production.
+      status.textContent = 'This form isn’t connected to a backend yet — see README.md, FIX3D_CONFIG.formEndpoint.';
+      status.classList.add('bad');
+      console.warn('[FIX3D] Submission blocked: FIX3D_CONFIG.formEndpoint is null. Set it to a real form endpoint.');
+      return;
+    }
+
+    var data = new FormData(form);
+    if (!CFG.uploadsEnabled) data.delete('photos');
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Sending…';
+
+    fetch(CFG.formEndpoint, { method: 'POST', body: data, headers: { Accept: 'application/json' } })
+      .then(function (res) {
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        showSuccess();
+      })
+      .catch(function (err) {
+        console.error('[FIX3D] Form submission failed:', err);
+        status.textContent = 'That didn’t send. Try again in a moment.';
+        status.classList.add('bad');
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Send it →';
+      });
+  });
+
+  function showSuccess() {
+    var panel = $('#form-success');
+    form.hidden = true;
+    panel.hidden = false;
+    panel.setAttribute('tabindex', '-1');
+    panel.focus();
+    track('Lead', true, { content_name: 'repair-request', issue: form.elements.issue.value });
+    track('RepairFormSubmit', false, { issue: form.elements.issue.value });
+  }
+
+  /* ---------- sticky mobile CTA ----------
+     Plain scroll math on purpose: an IntersectionObserver here would silently
+     never fire in contexts that don't composite frames, and this button is the
+     main conversion path on mobile. rAF-throttled passive listener. */
+  var sticky = $('#sticky');
+  var hero = $('.hero');
+  var fixSection = $('#fix');
+  var last = 0, trailing = null;
+
+  function syncSticky() {
+    last = Date.now();
+    var pastHero = window.scrollY > (hero.offsetTop + hero.offsetHeight - 120);
+    var box = fixSection.getBoundingClientRect();
+    var inForm = box.top < window.innerHeight && box.bottom > 0;
+    sticky.classList.toggle('on', pastHero && !inForm);
+  }
+  function onScroll() {
+    clearTimeout(trailing);
+    if (Date.now() - last > 60) syncSticky();
+    // trailing call so the final resting position is always correct
+    trailing = setTimeout(syncSticky, 90);
+  }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', onScroll, { passive: true });
+  syncSticky();
+
+  /* ---------- reveal on scroll ---------- */
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var rv = $$('.rv');
+  function revealAll() { rv.forEach(function (el) { el.classList.add('in'); }); }
+
+  if (reduce || !('IntersectionObserver' in window) || !rv.length) {
+    revealAll();
+  } else {
+    // arm the hiding only now that we can guarantee something will unhide it
+    document.documentElement.classList.add('rv-on');
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (en.isIntersecting) { en.target.classList.add('in'); io.unobserve(en.target); }
+      });
+    }, { rootMargin: '0px 0px -8% 0px', threshold: 0.08 });
+    rv.forEach(function (el) { io.observe(el); });
+    // failsafe: nothing on this page may stay invisible, ever
+    setTimeout(revealAll, 2500);
+    window.addEventListener('load', function () { setTimeout(revealAll, 1200); });
+  }
+})();
 </script>
 
 </body>

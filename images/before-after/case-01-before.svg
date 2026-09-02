@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1200" width="1200" height="1200" role="img" aria-label="Placeholder: BEFORE">
+  <defs>
+    <pattern id="hz" width="44" height="44" patternTransform="rotate(45)" patternUnits="userSpaceOnUse">
+      <rect width="44" height="44" fill="#0B0B0B"/>
+      <rect width="22" height="44" fill="#F5C518"/>
+    </pattern>
+  </defs>
+  <rect width="1200" height="1200" fill="#121212"/>
+  <rect x="0" y="0" width="1200" height="35" fill="url(#hz)" opacity="0.85"/>
+  <rect x="22" y="70" width="1156" height="1099" fill="none" stroke="rgba(244,242,237,0.14)" stroke-width="4" stroke-dasharray="36 24"/>
+  <text x="66" y="435.0" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" text-anchor="start" font-size="36" letter-spacing="7.2" fill="#F5C518">BA-01-B / PLACEHOLDER</text>
+  <text x="66" y="530.0" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" text-anchor="start" font-weight="700" font-size="74" fill="#F4F2ED">BEFORE</text>
+  <text x="66" y="605.0" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" text-anchor="start" font-size="32" fill="rgba(244,242,237,0.42)">SUBJECT  the machine or output as it arrived</text>
+  <text x="66" y="655.0" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" text-anchor="start" font-size="32" fill="rgba(244,242,237,0.42)">COMP     square, subject centered, consistent distance with AFTER</text>
+  <text x="66" y="705.0" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" text-anchor="start" font-size="32" fill="rgba(244,242,237,0.42)">CROP     1:1</text>
+  <text x="66" y="755.0" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" text-anchor="start" font-size="32" fill="rgba(244,242,237,0.42)">LIGHT    identical setup to the AFTER frame</text>
+  <text x="66" y="1134" text-anchor="start" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="32" fill="rgba(244,242,237,0.35)">1200&#215;1200</text>
+</svg>
