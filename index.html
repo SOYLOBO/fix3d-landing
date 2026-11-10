@@ -350,6 +350,7 @@ img.fp-t{object-position:50% 12%}
       <p class="stamp">Print happens.</p>
       <p class="said">We fix 3D printers.</p>
       <a class="btn btn-lg" href="#fix" data-cta="hero">Fix my printer <span aria-hidden="true">&rarr;</span></a>
+      <a class="btn" href="#consultation" data-cta="consultation-hero" style="margin-top:12px">Schedule a consultation &rarr;</a>
       <ul class="hero-meta lbl">
         <li>North NJ</li>
         <li>Drop-off + on-site</li>
@@ -719,6 +720,28 @@ img.fp-t{object-position:50% 12%}
     </div>
   </section>
 
+
+  <section class="sec" id="consultation">
+    <div class="wrap">
+      <div class="sec-head"><p class="lbl">Let’s get you printing</p><h2 class="d h2">Talk through the problem.</h2>
+      <p>Request a consultation. Tell us when works for you, and we’ll email to confirm. Your appointment is only booked after confirmation.</p></div>
+      <form class="form-wrap quick-capture" data-kind="consultation">
+        <div class="f"><label for="consult-email">Email</label><input id="consult-email" name="email" type="email" autocomplete="email" maxlength="200" required></div>
+        <div class="f"><label for="preferred-time">Preferred day and time (Eastern Time)</label><input id="preferred-time" name="preferred_time" placeholder="For example, Wednesday after 2 PM" minlength="3" maxlength="300" required></div>
+        <div hidden><label>Leave empty<input name="company" tabindex="-1" autocomplete="off"></label></div>
+        <button class="btn" type="submit">Request consultation &rarr;</button>
+        <p role="status" aria-live="polite"></p>
+      </form>
+      <div class="sec-head" style="margin-top:48px"><h3 class="d">Not ready to book?</h3><p>Leave your email and we’ll follow up about your printer. No repair details needed yet.</p></div>
+      <form class="form-wrap quick-capture" data-kind="email">
+        <div class="f"><label for="capture-email">Email</label><input id="capture-email" name="email" type="email" autocomplete="email" maxlength="200" required></div>
+        <div hidden><label>Leave empty<input name="company" tabindex="-1" autocomplete="off"></label></div>
+        <button class="btn" type="submit">Email me about repair &rarr;</button><p role="status" aria-live="polite"></p>
+      </form>
+      <p style="margin-top:16px">We use these details to respond to your request. This does not subscribe you to a marketing list.</p>
+    </div>
+  </section>
+
   <!-- ============ FAQ ============ -->
   <section class="sec" id="faq">
     <div class="wrap">
@@ -866,9 +889,9 @@ window.FIX3D_CONFIG = {
     window.fbq('track', 'PageView');
   }
   // Safe no-op wrapper: every call below works whether or not the pixel exists.
-  function track(name, standard, params) {
+  function track(name, standard, params, eventId) {
     if (typeof window.fbq !== 'function') return;
-    window.fbq(standard ? 'track' : 'trackCustom', name, params || {});
+    window.fbq(standard ? 'track' : 'trackCustom', name, params || {}, eventId ? { eventID: eventId } : {});
   }
 
   /* ---------- year ---------- */
@@ -879,6 +902,7 @@ window.FIX3D_CONFIG = {
   var qs = new URLSearchParams(location.search);
   var store = {};
   try { store = JSON.parse(sessionStorage.getItem('fix3d_attr') || '{}'); } catch (e) { store = {}; }
+  if (KEYS.some(function(k) { return qs.get(k); })) store = {};
   KEYS.forEach(function (k) { if (qs.get(k)) store[k] = qs.get(k); });
   try { sessionStorage.setItem('fix3d_attr', JSON.stringify(store)); } catch (e) {}
   var form = $('#repair-form');
@@ -887,7 +911,7 @@ window.FIX3D_CONFIG = {
     if (el) el.value = store[k] || '';
   });
   form.elements.referrer.value = document.referrer || '';
-  form.elements.landing_page.value = location.pathname + location.search;
+  form.elements.landing_page.value = location.pathname + (KEYS.some(function(k){return qs.get(k);}) ? '?' + new URLSearchParams(KEYS.filter(function(k){return qs.get(k);}).map(function(k){return [k,qs.get(k)];})).toString() : '');
 
   /* ---------- failure cards → preselect the problem ---------- */
   $$('.fail').forEach(function (card) {
@@ -967,6 +991,7 @@ window.FIX3D_CONFIG = {
   var status = $('#form-status');
   var submitBtn = form.querySelector('button[type=submit]');
 
+  var repairId = crypto.randomUUID();
   form.addEventListener('submit', function (e) {
     e.preventDefault();
     status.textContent = '';
@@ -992,6 +1017,7 @@ window.FIX3D_CONFIG = {
     }
 
     var data = new FormData(form);
+    data.set("submission_id", repairId);
     if (!CFG.uploadsEnabled) data.delete('photos');
 
     submitBtn.disabled = true;
@@ -1000,7 +1026,10 @@ window.FIX3D_CONFIG = {
     fetch(CFG.formEndpoint, { method: 'POST', body: data, headers: { Accept: 'application/json' } })
       .then(function (res) {
         if (!res.ok) throw new Error('HTTP ' + res.status);
-        showSuccess();
+        return res.json();
+      }).then(function(result) {
+        if (!result.ok || !result.accepted || result.event_id !== repairId) throw new Error('Request not accepted');
+        showSuccess(result.event_id);
       })
       .catch(function (err) {
         console.error('[FIX3D] Form submission failed:', err);
@@ -1011,15 +1040,39 @@ window.FIX3D_CONFIG = {
       });
   });
 
-  function showSuccess() {
+  function showSuccess(eventId) {
     var panel = $('#form-success');
     form.hidden = true;
     panel.hidden = false;
     panel.setAttribute('tabindex', '-1');
     panel.focus();
-    track('Lead', true, { content_name: 'repair-request', issue: form.elements.issue.value });
+    if (!eventId) return;
+    track('Lead', true, { content_name: 'repair-request' }, eventId);
     track('RepairFormSubmit', false, { issue: form.elements.issue.value });
   }
+
+  $$('.quick-capture').forEach(function(capture) {
+    var requestId = crypto.randomUUID(), saved = false;
+    capture.addEventListener('submit', function(e) {
+      e.preventDefault();
+      if (saved || !capture.reportValidity()) return;
+      var button = capture.querySelector('button'), message = capture.querySelector('[role=status]');
+      if (capture.elements.company.value) { message.textContent = 'Thank you.'; return; }
+      var data = new FormData(capture);
+      data.set('kind', capture.dataset.kind); data.set('submission_id', requestId);
+      KEYS.forEach(function(k){data.set(k, store[k] || '');});
+      data.set('referrer', form.elements.referrer.value); data.set('landing_page',form.elements.landing_page.value);
+      button.disabled = true; message.textContent = 'Sending…';
+      fetch('/api/contact', {method:'POST',body:data,headers:{Accept:'application/json'}})
+        .then(function(res){if(!res.ok) throw new Error(); return res.json();})
+        .then(function(result){
+          if (!result.ok || !result.accepted || result.event_id !== requestId) throw new Error();
+          saved = true;
+          message.textContent = capture.dataset.kind === 'consultation' ? 'Request received. We’ll email to confirm a time.' : 'Got it. We’ll follow up by email.';
+          track(capture.dataset.kind === 'consultation' ? 'ConsultationRequest' : 'EmailCapture', false, {}, result.event_id);
+        }).catch(function(){button.disabled = false; message.textContent = 'Could not send. Please try again.';});
+    });
+  });
 
   /* ---------- sticky mobile CTA ----------
      Plain scroll math on purpose: an IntersectionObserver here would silently

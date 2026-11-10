@@ -38,7 +38,7 @@ export async function onRequestPost({ request, env }) {
 
   // Honeypot: bots fill every field, the real form keeps this empty and hidden.
   // Answer 200 so the bot believes it succeeded, but store nothing.
-  if (clean(form.get('company'), 100) !== '') return json({ ok: true });
+  if (clean(form.get('company'), 100) !== '') return json({ ok: true, accepted: false });
 
   const f = {
     name:    clean(form.get('name'), MAX.name),
@@ -68,15 +68,17 @@ export async function onRequestPost({ request, env }) {
     return json({ ok: false, error: 'Storage is not configured.' }, 500);
   }
 
+  const eventId = clean(form.get('submission_id'), 80);
+  if (!/^[0-9a-f-]{36}$/i.test(eventId)) return json({ ok: false, error: 'Invalid submission ID.' }, 422);
   try {
     await env.DB.prepare(
       `INSERT INTO repair_requests
-         (name, phone, email, zip, make, model, issue, details, service,
+         (submission_id, name, phone, email, zip, make, model, issue, details, service,
           utm_source, utm_medium, utm_campaign, utm_content, utm_term,
           fbclid, referrer, landing_page, country, user_agent)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT(submission_id) DO NOTHING`
     ).bind(
-      f.name, f.phone, f.email, f.zip, f.make, f.model, f.issue, f.details, f.service,
+      eventId, f.name, f.phone, f.email, f.zip, f.make, f.model, f.issue, f.details, f.service,
       clean(form.get('utm_source'), MAX.utm),
       clean(form.get('utm_medium'), MAX.utm),
       clean(form.get('utm_campaign'), MAX.utm),
@@ -89,12 +91,12 @@ export async function onRequestPost({ request, env }) {
       clean(request.headers.get('user-agent'), MAX.user_agent)
     ).run();
   } catch (err) {
-    // Never lose the lead silently: log it so it's recoverable from the tail.
-    console.error('[FIX3D] Insert failed:', err && err.message, JSON.stringify(f));
+    // Never log customer details or raw database errors.
+    console.error('[FIX3D] Repair storage failed.');
     return json({ ok: false, error: 'Could not save the request.' }, 500);
   }
 
-  return json({ ok: true });
+  return json({ ok: true, accepted: true, event_id: eventId });
 }
 
 // Method-specific handlers don't shadow each other, so these are safe alongside

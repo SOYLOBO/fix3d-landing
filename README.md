@@ -136,3 +136,53 @@ Accessibility: semantic landmarks, skip link, visible focus rings, real form lab
 `aria-invalid` + `aria-describedby` errors, `role="status"` submission messages, keyboard
 reachable everything, and a full `prefers-reduced-motion` path that disables the ticker,
 reveals and transitions.
+
+## Conversion capture update (pending production approval)
+
+The hero now links to a consultation request form. Visitors provide email and a
+preferred time in Eastern Time; this is a request, not an automatically booked
+appointment. A separate email-only form requests a repair follow-up, not marketing
+subscription. Both POST to `/api/contact`, with attribution stored in
+`contact_requests`. Read these requests in D1 and follow up manually; no outgoing
+email notification or calendar integration is configured.
+
+Repair Leads require a JSON acceptance receipt matching the submission ID.
+Honeypots never generate conversion events. Retry IDs are unique in D1.
+EmailCapture and ConsultationRequest are separate custom events, not repair Leads.
+Meta remains disabled until the verified account Pixel ID is supplied.
+
+### Proposed deployment sequence — do not run without approval
+
+1. Back up the existing D1 schema. On a separate local/test database, apply
+   `migrations/0001_conversion_capture.sql` once for an existing installation.
+   For a fresh database use `schema.sql` instead; do not run both.
+2. Run `node tests/conversions.mjs`. These tests use synthetic in-memory mocks,
+   never production storage or Meta. Preview desktop/mobile UI and exercise
+   the full forms against an isolated test D1 before publishing.
+3. With approval, apply the migration once to the production database, then
+   deploy this branch to the existing Cloudflare Pages project. No live test
+   leads are needed. Confirm deployed source and inspect aggregate results.
+4. Configure the verified Meta Pixel ID separately, with appropriate tracking
+   permissions, and validate event receipt in an isolated test dataset first.
+
+The additive migration preserves existing repair rows. Roll back frontend/functions
+together if necessary; keep the added table and column to preserve captured data.
+
+### Privacy-preserving source check
+
+Use the same dates as Cloudflare's milestone and inspect referrers, countries,
+landing paths, and available bot/human classifications in Analytics. D1 only has
+attribution for submissions, not all visits. Run aggregate queries, not SELECT *:
+
+```sql
+SELECT utm_source, utm_medium, utm_campaign, COUNT(*) AS requests
+FROM repair_requests
+GROUP BY utm_source, utm_medium, utm_campaign
+ORDER BY requests DESC;
+
+SELECT kind, status, COUNT(*) AS requests
+FROM contact_requests GROUP BY kind, status;
+```
+
+Do not publish small-cell or personally identifying results. No revenue or paid
+customer tracking, CAPI delivery, or automatic appointment confirmation is added.

@@ -4,6 +4,7 @@
 
 CREATE TABLE IF NOT EXISTS repair_requests (
   id          INTEGER PRIMARY KEY AUTOINCREMENT,
+  submission_id TEXT UNIQUE,
   created_at  TEXT NOT NULL DEFAULT (datetime('now')),
 
   -- who
@@ -43,3 +44,14 @@ CREATE TABLE IF NOT EXISTS repair_requests (
 CREATE INDEX IF NOT EXISTS idx_requests_created ON repair_requests (created_at DESC);
 CREATE INDEX IF NOT EXISTS idx_requests_status  ON repair_requests (status);
 CREATE INDEX IF NOT EXISTS idx_requests_source  ON repair_requests (utm_source, utm_campaign);
+
+CREATE TABLE IF NOT EXISTS contact_requests (
+  event_id TEXT PRIMARY KEY,
+  created_at TEXT NOT NULL DEFAULT (datetime('now')),
+  kind TEXT NOT NULL CHECK(kind IN ('email','consultation')),
+  email TEXT NOT NULL,
+  preferred_time TEXT NOT NULL DEFAULT '',
+  utm_source TEXT, utm_medium TEXT, utm_campaign TEXT, utm_content TEXT, utm_term TEXT,
+  fbclid TEXT, referrer TEXT, landing_page TEXT,
+  status TEXT NOT NULL DEFAULT 'new'
+);
